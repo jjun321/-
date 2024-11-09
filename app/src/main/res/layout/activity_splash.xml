@@ -1,0 +1,16 @@
+<!-- res/layout/activity_splash.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"> <!-- 흰색 배경 예시 -->
+
+    <TextView
+        android:id="@+id/startingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="처음 시작부분 UI"
+        android:textSize="24sp"
+        android:textColor="#000000"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

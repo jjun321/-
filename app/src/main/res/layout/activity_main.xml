@@ -40,7 +40,7 @@
             android:id="@+id/license"
             android:layout_width="115dp"
             android:layout_height="37dp"
-            android:text="자격증"
+            android:text="필수 자격증"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.138"
@@ -115,5 +115,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/navigation_menu"/>
+        app:menu="@menu/navigation_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

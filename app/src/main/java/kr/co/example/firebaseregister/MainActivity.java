@@ -24,14 +24,31 @@ public class MainActivity extends AppCompatActivity {
         Button menuButton = findViewById(R.id.menu_button);
         menuButton.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.START));
 
-        // 수능 버튼 클릭 이벤트 설정
         Button collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
-        collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity());
+        collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity("college_entrance_exam"));
+
+        Button foreignLanguageButton = findViewById(R.id.high_school_student);
+        foreignLanguageButton.setOnClickListener(v -> openCategoryActivity("foreign_language"));
+
+        Button programmingButton = findViewById(R.id.programming);
+        programmingButton.setOnClickListener(v -> openCategoryActivity("programming"));
+
+        Button essentialLicenseButton = findViewById(R.id.license);
+        essentialLicenseButton.setOnClickListener(v -> openCategoryActivity("essential_license"));
+
+        Button transferButton = findViewById(R.id.transfer);
+        transferButton.setOnClickListener(v -> openCategoryActivity("transfer"));
+
+        Button publicOfficialButton = findViewById(R.id.public_official);
+        publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
+
+
     }
 
-    private void openCategoryActivity() {
-        // CategoryActivity로 이동
+    private void openCategoryActivity(String categoryType) {
         Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+        intent.putExtra("CATEGORY_TYPE", categoryType); // 카테고리 유형 전달
         startActivity(intent);
     }
+
 }

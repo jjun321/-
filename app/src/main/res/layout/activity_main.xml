@@ -9,104 +9,89 @@
 
     <!-- 메인 콘텐츠 영역 -->
 
-    <!-- 왼쪽에서 열리는 NavigationView -->
+    <!-- 네비게이션 뷰 -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="88dp"
-            android:layout_height="19dp"
-            android:text="학습 카테고리"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
+        <!-- 툴바 -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.095" />
+            app:title="학습 카테고리"
+            app:titleTextColor="@android:color/white" />
 
         <!-- 각 버튼 -->
+
         <Button
             android:id="@+id/college_entrance_exam"
             android:layout_width="115dp"
             android:layout_height="37dp"
+            android:layout_marginTop="96dp"
             android:text="수능"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.138"
+            app:layout_constraintHorizontal_bias="0.131"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.213" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <Button
             android:id="@+id/license"
             android:layout_width="115dp"
             android:layout_height="37dp"
+            android:layout_marginTop="4dp"
             android:text="필수 자격증"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.138"
+            app:layout_constraintHorizontal_bias="0.131"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.266" />
+            app:layout_constraintTop_toBottomOf="@id/college_entrance_exam" />
 
         <Button
             android:id="@+id/transfer"
             android:layout_width="115dp"
             android:layout_height="37dp"
+            android:layout_marginTop="96dp"
             android:text="편입"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.266" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <Button
             android:id="@+id/public_official"
             android:layout_width="115dp"
             android:layout_height="37dp"
+            android:layout_marginTop="96dp"
             android:text="공무원"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.908"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.268" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <Button
             android:id="@+id/high_school_student"
             android:layout_width="115dp"
             android:layout_height="35dp"
+            android:layout_marginTop="4dp"
             android:text="외국어"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.213" />
+            app:layout_constraintTop_toBottomOf="@id/college_entrance_exam" />
 
         <Button
             android:id="@+id/programming"
             android:layout_width="115dp"
             android:layout_height="38dp"
+            android:layout_marginTop="200dp"
             android:text="프로그래밍"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.908"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.213" />
-
-        <!-- 왼쪽 메뉴 열기 버튼 -->
-        <Button
-            android:id="@+id/menu_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:text="메뉴"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +99,7 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/navigation_menu" />

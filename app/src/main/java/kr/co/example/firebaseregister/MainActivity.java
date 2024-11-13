@@ -2,11 +2,13 @@ package kr.co.example.firebaseregister;
 
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.view.Gravity;
 import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,10 +22,18 @@ public class MainActivity extends AppCompatActivity {
         // DrawerLayout 초기화
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        // 왼쪽 드로어 메뉴 버튼
-        Button menuButton = findViewById(R.id.menu_button);
-        menuButton.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.START));
+        // Toolbar 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        // ActionBarDrawerToggle을 사용해 툴바와 드로어 연동
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        );
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // 카테고리 버튼 설정
         Button collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
         collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity("college_entrance_exam"));
 
@@ -41,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button publicOfficialButton = findViewById(R.id.public_official);
         publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
-
-
     }
 
     private void openCategoryActivity(String categoryType) {
@@ -51,4 +59,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onBackPressed() {
+        // 드로어가 열려 있을 때 뒤로 가기 버튼을 누르면 드로어를 닫음
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         Drawable navIcon = toolbar.getNavigationIcon();
                         if (navIcon != null) {
                             int iconWidth = navIcon.getIntrinsicWidth() + toolbar.getContentInsetStartWithNavigation();
-                            int adjustedPadding = iconWidth - 200; // 왼쪽으로 20px 이동
+                            int adjustedPadding = iconWidth - 250; // 왼쪽으로 20px 이동
                             titleTextView.setPadding(adjustedPadding, 0, 0, 0);
                         }
                         break;

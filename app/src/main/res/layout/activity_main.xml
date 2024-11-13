@@ -26,7 +26,8 @@
             android:background="#000000"
             app:layout_constraintTop_toTopOf="parent"
             app:title="학습 카테고리"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            app:titleTextAppearance="@style/ToolbarTitleText" />
 
         <!-- 각 버튼 -->
 

@@ -1,18 +1,23 @@
 package kr.co.example.firebaseregister;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+import android.view.Gravity;
+import android.widget.Button;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import android.view.Gravity;
-import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +31,32 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // ActionBarDrawerToggle을 사용해 툴바와 드로어 연동
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        // ActionBarDrawerToggle 설정
+        toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
         );
+
+        // 기본 네비게이션 아이콘 비활성화
+        toggle.setDrawerIndicatorEnabled(false);
+
+        // BitmapDrawable을 사용하여 PNG 이미지 크기 조정
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu); // PNG 이미지를 Bitmap으로 로드
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, false); // 원하는 크기로 Bitmap 조정
+        Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap); // Bitmap을 Drawable로 변환
+        toolbar.setNavigationIcon(customIcon); // 조정된 아이콘을 네비게이션 아이콘으로 설정
+
+        // 네비게이션 아이콘 클릭 시 드로어 열기/닫기 설정
+        toolbar.setNavigationOnClickListener(v -> {
+            if (drawerLayout.isDrawerOpen(Gravity.START)) {
+                drawerLayout.closeDrawer(Gravity.START);
+            } else {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
+
+        // 드로어 리스너 추가
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 

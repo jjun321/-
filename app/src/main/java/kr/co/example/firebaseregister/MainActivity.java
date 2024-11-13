@@ -7,7 +7,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
         toggle.setDrawerIndicatorEnabled(false);
 
         // BitmapDrawable을 사용하여 PNG 이미지 크기 조정
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu); // PNG 이미지를 Bitmap으로 로드
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, false); // 원하는 크기로 Bitmap 조정
-        Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap); // Bitmap을 Drawable로 변환
-        toolbar.setNavigationIcon(customIcon); // 조정된 아이콘을 네비게이션 아이콘으로 설정
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, false); // 원하는 크기로 조정
+        Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);
+        toolbar.setNavigationIcon(customIcon);
 
         // 네비게이션 아이콘 클릭 시 드로어 열기/닫기 설정
         toolbar.setNavigationOnClickListener(v -> {
@@ -59,6 +62,31 @@ public class MainActivity extends AppCompatActivity {
         // 드로어 리스너 추가
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        // Toolbar의 제목을 중앙으로 정렬 및 아이콘 크기만큼 보정
+        toolbar.post(() -> {
+            for (int i = 0; i < toolbar.getChildCount(); i++) {
+                View view = toolbar.getChildAt(i);
+                if (view instanceof TextView) {
+                    TextView titleTextView = (TextView) view;
+                    if (titleTextView.getText().equals(toolbar.getTitle())) {
+                        Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleTextView.getLayoutParams();
+                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        titleTextView.setLayoutParams(layoutParams);
+                        titleTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                        // 아이콘의 너비만큼 왼쪽 패딩 추가
+                        Drawable navIcon = toolbar.getNavigationIcon();
+                        if (navIcon != null) {
+                            int iconWidth = navIcon.getIntrinsicWidth() + toolbar.getContentInsetStartWithNavigation();
+                            int adjustedPadding = iconWidth - 200; // 왼쪽으로 20px 이동
+                            titleTextView.setPadding(adjustedPadding, 0, 0, 0);
+                        }
+                        break;
+                    }
+                }
+            }
+        });
 
         // 카테고리 버튼 설정
         Button collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
@@ -82,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openCategoryActivity(String categoryType) {
         Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
-        intent.putExtra("CATEGORY_TYPE", categoryType); // 카테고리 유형 전달
+        intent.putExtra("CATEGORY_TYPE", categoryType);
         startActivity(intent);
     }
 

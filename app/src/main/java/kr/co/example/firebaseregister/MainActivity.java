@@ -7,6 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         // BitmapDrawable을 사용하여 PNG 이미지 크기 조정
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 120, false); // 원하는 크기로 조정
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 130, false); // 원하는 크기로 조정
         Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);
         toolbar.setNavigationIcon(customIcon);
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         Drawable navIcon = toolbar.getNavigationIcon();
                         if (navIcon != null) {
                             int iconWidth = navIcon.getIntrinsicWidth() + toolbar.getContentInsetStartWithNavigation();
-                            int adjustedPadding = iconWidth - 250; // 왼쪽으로 20px 이동
+                            int adjustedPadding = iconWidth - 150; // 왼쪽으로 20px 이동
                             titleTextView.setPadding(adjustedPadding, 0, 0, 0);
                         }
                         break;
@@ -106,6 +108,24 @@ public class MainActivity extends AppCompatActivity {
 
         Button publicOfficialButton = findViewById(R.id.public_official);
         publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
+    }
+
+    // 사용자 정보 수정 페이지로 이동
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu); // 메뉴 파일 적용
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_edit_profile) {
+            // 사용자 정보 수정 페이지로 이동
+            Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void openCategoryActivity(String categoryType) {

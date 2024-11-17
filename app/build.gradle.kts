@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
 
     // Glide 라이브러리 추가
     implementation ("com.github.bumptech.glide:glide:4.12.0")

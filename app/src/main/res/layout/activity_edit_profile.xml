@@ -4,29 +4,57 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/edit_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name" />
 
+    
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
     <EditText
         android:id="@+id/edit_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="Vlaue"
         android:inputType="textEmailAddress" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 수정"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
     <EditText
         android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Value"
         android:inputType="textPassword" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 확인"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp" />
+    <EditText
+        android:id="@+id/check_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Value"
+        android:inputType="textPassword" />
+
 
     <Button
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="회원정보 수정" />
 </LinearLayout>

@@ -50,7 +50,5 @@
             android:name=".EditProfileActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
-
-
     </application>
 </manifest>

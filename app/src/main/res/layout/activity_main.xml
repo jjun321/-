@@ -8,9 +8,6 @@
     android:layout_height="match_parent">
 
     <!-- 메인 콘텐츠 영역 -->
-
-    <!-- 네비게이션 뷰 -->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -105,6 +102,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#ffffff"
+        app:headerLayout="@layout/navigation_header"
         app:menu="@menu/navigation_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

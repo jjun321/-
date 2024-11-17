@@ -1,27 +1,16 @@
-<!-- res/layout/navigation_header.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#000000"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/ic_profile_placeholder"
-        android:contentDescription="프로필 이미지"
-        android:layout_gravity="center"
-        android:background="?attr/selectableItemBackgroundBorderless" />
-
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/nav_header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="사용자 이름"
-        android:textSize="16sp"
-        android:layout_gravity="center"
-        android:paddingTop="8dp"
-        android:textStyle="bold" />
+        android:text="환영합니다!"
+        android:textSize="18sp"
+        android:textColor="@android:color/white" />
 </LinearLayout>

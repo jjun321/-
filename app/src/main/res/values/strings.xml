@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FirebaseRegister</string>
+    <string name="navigation_drawer_open">메뉴 열기</string>
+    <string name="navigation_drawer_close">메뉴 닫기</string>
+
+    <style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+            <item name="android:textSize">16sp</item> <!-- 원하는 크기로 조정 -->
+            <item name="android:textColor">#FFFFFF</item> <!-- 텍스트 색상 설정 -->
+    </style>
+
+
 </resources>

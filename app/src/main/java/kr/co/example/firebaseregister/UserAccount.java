@@ -5,6 +5,7 @@ public class UserAccount {
     private String idToken;
     private String emailId;
     private String password;
+    private String name;
 
     public UserAccount() {
         // 기본 생성자
@@ -33,4 +34,15 @@ public class UserAccount {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
+
+

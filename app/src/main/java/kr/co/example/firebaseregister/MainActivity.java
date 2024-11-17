@@ -19,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -28,6 +32,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        // NavigationView 설정
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        View headerView = navigationView.getHeaderView(0); // 헤더 뷰 가져오기
+
+        // Firebase 사용자 정보 가져오기
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userName = (currentUser != null && currentUser.getDisplayName() != null)
+                ? currentUser.getDisplayName()
+                : "Guest";
+
+        // 헤더에 사용자 이름 설정
+        TextView headerTitle = headerView.findViewById(R.id.nav_header_title);
+        headerTitle.setText(userName);
+
+
+
+
+
+        // Navigation 메뉴 항목 업데이트
+        Menu menu = navigationView.getMenu();
+        MenuItem profileItem = menu.findItem(R.id.profile); // profile 항목의 ID
+        if (profileItem != null) {
+            profileItem.setTitle(userName); // 사용자 이름으로 제목 변경
+        }
+
+
+
 
         // DrawerLayout 초기화
         drawerLayout = findViewById(R.id.drawer_layout);

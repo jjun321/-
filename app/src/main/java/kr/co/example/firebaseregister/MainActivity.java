@@ -3,12 +3,14 @@ package kr.co.example.firebaseregister;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +18,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+//////
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         // Toolbar설정 //Toolbar오류
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+/////////////////////////////////////////////
+        // "시간표 추가" 버튼 클릭 리스너 추가
+        Button addTimetableButton = findViewById(R.id.btn_add_timetable);
+        addTimetableButton.setOnClickListener(v -> showAddSubjectDialog()); // 다이얼로그 호출
+
 
         // 기본 액션바의 타이틀 숨기기
         if (getSupportActionBar() != null) {
@@ -87,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
             Log.e("MainActivity", "Profile icon not found!");
         }
 
+//////////
+        // 네비게이션 뷰 설정
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+
+
+
         // 카테고리 버튼 설정
         Button collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
         collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity("college_entrance_exam"));
@@ -105,7 +123,35 @@ public class MainActivity extends AppCompatActivity {
 
         Button publicOfficialButton = findViewById(R.id.public_official);
         publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
+
+
+
+
+
+
     }
+
+
+//////////
+    // 네비게이션 메뉴 선택 동작
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_planer) { // 학습 계획표 선택 시 PlannerActivity로 이동
+            Intent intent = new Intent(MainActivity.this, PlannerActivity.class);
+            startActivity(intent);
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+
+            // 다른 메뉴 항목 처리
+        } else if (itemId == R.id.profile) {
+            openProfileFragment();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+        return false;
+    }
+
+
 
     // ProfileFragment 열기
     private void openProfileFragment() {

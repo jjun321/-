@@ -52,5 +52,7 @@
             android:parentActivityName=".MainActivity"/>
 
 
+        <activity android:name=".PlannerActivity" />
+
     </application>
 </manifest>

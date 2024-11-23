@@ -9,10 +9,6 @@
 
     <!-- 프로필 아이콘 -->
 
-    <!-- 사용자 이름 -->
-
-    <!-- 학습 시간 카드뷰 -->
-
     <ImageView
         android:id="@+id/profile_icon"
         android:layout_width="64dp"
@@ -32,13 +28,13 @@
         android:id="@+id/UserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="264dp"
         android:text="김OO"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.225"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -55,36 +51,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/UserName">
 
+        <!-- 학습 시간 카드뷰 -->
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="166dp"
             android:orientation="vertical">
 
             <!-- 학습 시간 타이틀 -->
             <TextView
-                android:id="@+id/tvStudyDate"
+                android:id="@+id/StudyDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2024년 1월 1일"
+                android:text="N년 N월 N일"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <!-- 학습 시간 설명 -->
             <TextView
-                android:id="@+id/tvStudyContent"
+                android:id="@+id/StudyContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="김OO 학생의 학습 시간"
+                android:text="AAA 학생의 학습 시간"
                 android:textSize="14sp" />
 
             <!-- 학습 시간 -->
             <TextView
-                android:id="@+id/tvStudyHours"
+                android:id="@+id/StudyHours"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="10시간"
+                android:text="BB시간"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>

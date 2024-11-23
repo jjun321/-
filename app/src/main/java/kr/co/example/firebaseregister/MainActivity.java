@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     String userName = task.getResult().getValue(String.class); // 사용자 이름 가져오기
                     if (userName != null) {
                         // 헤더 텍스트 업데이트
-                        headerTitle.setText("환영합니다. " + userName + "님!");
+                        headerTitle.setText(userName + "님" + " 환영합니다! ");
 
                         // MenuItem(profile) 업데이트
                         Menu menu = navigationView.getMenu();
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         // 이름이 없을 경우 기본값 설정
-                        headerTitle.setText("환영합니다, Guest님!");
+                        headerTitle.setText( "Guest님 환영합니다!");
                         Menu menu = navigationView.getMenu();
                         MenuItem profileItem = menu.findItem(R.id.profile);
                         if (profileItem != null) {

@@ -19,7 +19,6 @@
         android:layout_height="64dp"
         android:contentDescription="프로필 이미지"
         android:src="@drawable/ic_profile"
-
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="46dp" />

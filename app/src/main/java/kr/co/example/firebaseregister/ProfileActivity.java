@@ -10,9 +10,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView tvUserName, tvStudyContent;
+    private TextView tvUserName, tvStudyContent, tvStudyDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
         // XML에 정의된 TextView를 가져옴
         tvUserName = findViewById(R.id.UserName);
         tvStudyContent = findViewById(R.id.tvStudyContent); // 학습 시간 TextView 가져오기
+        tvStudyDate = findViewById(R.id.tvStudyDate); // 학습 날짜 TextView 가져오기
 
         // Firebase Auth를 사용해 현재 사용자 정보 가져오기
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -34,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
                     .getReference("UserAccount")
                     .child(uid);
 
+            // 사용자 이름 가져오기
             userRef.child("name").get().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     String userName = task.getResult().getValue(String.class);
@@ -48,9 +54,34 @@ public class ProfileActivity extends AppCompatActivity {
                     tvStudyContent.setText("Guest님의 학습 시간"); // 기본값 설정
                 }
             });
+
+            // 학습 날짜 가져오기
+            userRef.child("study_date").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult().exists()) {
+                    String studyDate = task.getResult().getValue(String.class);
+
+                    // Firebase에서 가져온 날짜 설정
+                    if (studyDate != null) {
+                        tvStudyDate.setText(studyDate); // Firebase 날짜 설정
+                    } else {
+                        tvStudyDate.setText(getCurrentDate()); // 현재 날짜로 설정
+                    }
+                } else {
+                    tvStudyDate.setText(getCurrentDate()); // 기본값: 현재 날짜
+                }
+            });
+
         } else {
             tvUserName.setText("로그인 필요"); // 로그아웃 상태일 경우
             tvStudyContent.setText("로그인 필요님의 학습 시간"); // 로그아웃 상태일 경우
+            tvStudyDate.setText(getCurrentDate()); // 로그아웃 상태일 경우 현재 날짜 표시
         }
+    }
+
+    // 현재 날짜를 가져오는 메서드
+    private String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault());
+        return dateFormat.format(calendar.getTime());
     }
 }

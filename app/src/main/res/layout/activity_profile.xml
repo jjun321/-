@@ -5,10 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="0dp">
+
+    <!-- 툴바 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="프로필"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        app:titleTextColor="@android:color/white" />
 
     <!-- 프로필 아이콘 -->
-
     <ImageView
         android:id="@+id/profile_icon"
         android:layout_width="64dp"
@@ -29,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="264dp"
-        android:text="김OO"
+        android:text="Guest"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf=""
@@ -73,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="AAA 학생의 학습 시간"
+                android:text="Guest 학생의 학습 시간"
                 android:textSize="14sp" />
 
             <!-- 학습 시간 -->

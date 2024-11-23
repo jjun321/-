@@ -1,6 +1,9 @@
 package kr.co.example.firebaseregister;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,6 +79,21 @@ public class ProfileActivity extends AppCompatActivity {
             tvStudyContent.setText("로그인 필요님의 학습 시간"); // 로그아웃 상태일 경우
             tvStudyDate.setText(getCurrentDate()); // 로그아웃 상태일 경우 현재 날짜 표시
         }
+
+
+        // "회원정보 수정" 버튼 클릭 시 EditProfileActivity로 이동
+        Button btnEditProfile = findViewById(R.id.btnEditProfile);
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // EditProfileActivity로 이동
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
     }
 
     // 현재 날짜를 가져오는 메서드
@@ -84,4 +102,8 @@ public class ProfileActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault());
         return dateFormat.format(calendar.getTime());
     }
+
+
+
+
 }

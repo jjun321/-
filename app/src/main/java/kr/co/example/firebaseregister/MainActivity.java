@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         // NavigationView 초기화
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
+// 헤더 뷰 가져오기
+        View headerView = navigationView.getHeaderView(0); // 첫 번째 헤더 뷰 가져오기
+        TextView headerTitle = headerView.findViewById(R.id.nav_header_title); // 헤더 텍스트뷰 가져오기
+
 // Firebase Authentication에서 사용자 정보 가져오기
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -50,14 +54,27 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     String userName = task.getResult().getValue(String.class); // 사용자 이름 가져오기
                     if (userName != null) {
+                        // 헤더 텍스트 업데이트
+                        headerTitle.setText("환영합니다. " + userName + "님!");
+
+                        // MenuItem(profile) 업데이트
                         Menu menu = navigationView.getMenu();
                         MenuItem profileItem = menu.findItem(R.id.profile);
                         if (profileItem != null) {
-                            profileItem.setTitle(userName); // 사용자 이름 설정
+                            profileItem.setTitle(userName); // 사용자 이름만 표시
+                        }
+                    } else {
+                        // 이름이 없을 경우 기본값 설정
+                        headerTitle.setText("환영합니다, Guest님!");
+                        Menu menu = navigationView.getMenu();
+                        MenuItem profileItem = menu.findItem(R.id.profile);
+                        if (profileItem != null) {
+                            profileItem.setTitle("Guest");
                         }
                     }
                 } else {
-                    // 실패 시 기본값 설정
+                    // 데이터 가져오기 실패 시 기본값 설정
+                    headerTitle.setText("환영합니다, Guest님!");
                     Menu menu = navigationView.getMenu();
                     MenuItem profileItem = menu.findItem(R.id.profile);
                     if (profileItem != null) {
@@ -66,11 +83,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // FirebaseAuth에서 사용자 정보가 없는 경우
+            // 로그인하지 않은 경우 기본값 설정
+            headerTitle.setText("환영합니다, Guest님!");
             Menu menu = navigationView.getMenu();
             MenuItem profileItem = menu.findItem(R.id.profile);
             if (profileItem != null) {
-                profileItem.setTitle("로그인 필요"); // 기본 제목 설정
+                profileItem.setTitle("로그인 필요");
             }
         }
 

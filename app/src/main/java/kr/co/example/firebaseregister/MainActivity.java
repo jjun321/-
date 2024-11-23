@@ -74,9 +74,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-
-
         // DrawerLayout 초기화
         drawerLayout = findViewById(R.id.drawer_layout);
 

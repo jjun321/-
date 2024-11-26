@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white"> <!-- 여기에 색상 설정 -->>
 
 
 
@@ -22,7 +23,6 @@
         android:hint="Vlaue"
         android:inputType="textEmailAddress" />
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Value"
+        android:hint="수정할 비밀번호를 입력해주세요."
         android:inputType="textPassword" />
 
     <TextView
@@ -56,5 +56,7 @@
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="회원정보 수정" />
+        android:text="회원정보 수정"
+        android:backgroundTint="@android:color/black"
+        android:textColor="@android:color/white"/>
 </LinearLayout>

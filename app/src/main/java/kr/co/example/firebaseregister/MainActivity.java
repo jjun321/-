@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         // BitmapDrawable을 사용하여 PNG 이미지 크기 조정
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 130, false); // 원하는 크기로 조정
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 100, 110, false); // 원하는 크기로 조정
         Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);
         toolbar.setNavigationIcon(customIcon);
 

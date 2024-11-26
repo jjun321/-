@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -39,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         // NavigationView 초기화
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
+// 헤더 뷰 가져오기
+        View headerView = navigationView.getHeaderView(0); // 첫 번째 헤더 뷰 가져오기
+        TextView headerTitle = headerView.findViewById(R.id.nav_header_title); // 헤더 텍스트뷰 가져오기
+
 // Firebase Authentication에서 사용자 정보 가져오기
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -51,14 +54,27 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     String userName = task.getResult().getValue(String.class); // 사용자 이름 가져오기
                     if (userName != null) {
+                        // 헤더 텍스트 업데이트
+                        headerTitle.setText(userName + "님" + " 환영합니다! ");
+
+                        // MenuItem(profile) 업데이트
                         Menu menu = navigationView.getMenu();
                         MenuItem profileItem = menu.findItem(R.id.profile);
                         if (profileItem != null) {
-                            profileItem.setTitle(userName); // 사용자 이름 설정
+                            profileItem.setTitle(userName); // 사용자 이름만 표시
+                        }
+                    } else {
+                        // 이름이 없을 경우 기본값 설정
+                        headerTitle.setText( "Guest님 환영합니다!");
+                        Menu menu = navigationView.getMenu();
+                        MenuItem profileItem = menu.findItem(R.id.profile);
+                        if (profileItem != null) {
+                            profileItem.setTitle("Guest");
                         }
                     }
                 } else {
-                    // 실패 시 기본값 설정
+                    // 데이터 가져오기 실패 시 기본값 설정
+                    headerTitle.setText("환영합니다, Guest님!");
                     Menu menu = navigationView.getMenu();
                     MenuItem profileItem = menu.findItem(R.id.profile);
                     if (profileItem != null) {
@@ -67,13 +83,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // FirebaseAuth에서 사용자 정보가 없는 경우
+            // 로그인하지 않은 경우 기본값 설정
+            headerTitle.setText("환영합니다, Guest님!");
             Menu menu = navigationView.getMenu();
             MenuItem profileItem = menu.findItem(R.id.profile);
             if (profileItem != null) {
-                profileItem.setTitle("로그인 필요"); // 기본 제목 설정
+                profileItem.setTitle("로그인 필요");
             }
         }
+
+
+
 
         // DrawerLayout 초기화
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -94,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         // BitmapDrawable을 사용하여 PNG 이미지 크기 조정
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 120, 130, false); // 원하는 크기로 조정
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 100, 110, false); // 원하는 크기로 조정
         Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);
         toolbar.setNavigationIcon(customIcon);
 
@@ -137,22 +157,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 카테고리 버튼 설정
-        ImageButton collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
+        Button collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
         collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity("college_entrance_exam"));
 
-        ImageButton foreignLanguageButton = findViewById(R.id.high_school_student);
+        Button foreignLanguageButton = findViewById(R.id.high_school_student);
         foreignLanguageButton.setOnClickListener(v -> openCategoryActivity("foreign_language"));
 
-        ImageButton programmingButton = findViewById(R.id.programming);
+        Button programmingButton = findViewById(R.id.programming);
         programmingButton.setOnClickListener(v -> openCategoryActivity("programming"));
 
-        ImageButton essentialLicenseButton = findViewById(R.id.license);
+        Button essentialLicenseButton = findViewById(R.id.license);
         essentialLicenseButton.setOnClickListener(v -> openCategoryActivity("essential_license"));
 
-        ImageButton transferButton = findViewById(R.id.transfer);
+        Button transferButton = findViewById(R.id.transfer);
         transferButton.setOnClickListener(v -> openCategoryActivity("transfer"));
 
-        ImageButton publicOfficialButton = findViewById(R.id.public_official);
+        Button publicOfficialButton = findViewById(R.id.public_official);
         publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
     }
 

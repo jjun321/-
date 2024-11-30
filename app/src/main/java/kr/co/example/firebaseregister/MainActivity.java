@@ -43,13 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 /////////////////////////////////////////////
-        // "시간표 추가" 버튼 클릭 리스너 추가
-        Button addTimetableButton = findViewById(R.id.btn_add_timetable);
-        if (addTimetableButton != null) {
-            addTimetableButton.setOnClickListener(v -> showAddSubjectDialog());
-        } else {
-            Log.e("MainActivity", "Add Timetable button not found!");
-        }
+
 
 
         // 기본 액션바의 타이틀 숨기기
@@ -136,23 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void showAddSubjectDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("시간표 추가")
-                .setMessage("새로운 과목을 추가하시겠습니까?")
-                .setPositiveButton("확인", (dialog, which) -> {
-                    // 확인 버튼 동작
-                    Log.d("MainActivity", "과목 추가 확인 클릭");
-                    dialog.dismiss();
-                })
-                .setNegativeButton("취소", (dialog, which) -> {
-                    // 취소 버튼 동작
-                    Log.d("MainActivity", "과목 추가 취소 클릭");
-                    dialog.dismiss();
-                })
-                .create()
-                .show();
-    }
+
 
 
 

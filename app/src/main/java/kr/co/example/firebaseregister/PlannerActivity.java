@@ -41,17 +41,15 @@ public class PlannerActivity extends AppCompatActivity {
         // 달력 버튼 클릭 시 DatePickerDialog 표시
         datePickerButton.setOnClickListener(v -> showDatePickerDialog());
 
-        // 시간표 수정 및 추가 버튼 클릭 시 동작
-        Button editButton = findViewById(R.id.btn_edit_timetable);
-        Button addButton = findViewById(R.id.btn_add_timetable);
 
-        editButton.setOnClickListener(v ->
-                Toast.makeText(this, "시간표 수정 클릭됨", Toast.LENGTH_SHORT).show());
 
-        addButton.setOnClickListener(v ->
-                Toast.makeText(this, "시간표 추가 클릭됨", Toast.LENGTH_SHORT).show());
+
+        // 시간표 추가 버튼 연결
+        Button addTimetableButton = findViewById(R.id.btn_add_timetable);
+        addTimetableButton.setOnClickListener(v -> {
+            showAddSubjectDialog(); // 다이얼로그 호출
+        });
     }
-
     // DatePickerDialog를 표시하는 메서드
     private void showDatePickerDialog() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {

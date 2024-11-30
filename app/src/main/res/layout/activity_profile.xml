@@ -5,13 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="0dp">
+
+    <!-- 툴바 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        app:titleTextColor="@android:color/white" />
 
     <!-- 프로필 아이콘 -->
 
     <!-- 사용자 이름 -->
 
     <!-- 학습 시간 카드뷰 -->
+
+    <ImageButton
+        android:id="@+id/btnArrowback"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:backgroundTint="@color/black"
+        app:srcCompat="@mipmap/ic_arrowback"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <ImageView
         android:id="@+id/profile_icon"

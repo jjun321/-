@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -157,22 +158,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 카테고리 버튼 설정
-        Button collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
+        ImageButton collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
         collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity("college_entrance_exam"));
 
-        Button foreignLanguageButton = findViewById(R.id.high_school_student);
+        ImageButton foreignLanguageButton = findViewById(R.id.high_school_student);
         foreignLanguageButton.setOnClickListener(v -> openCategoryActivity("foreign_language"));
 
-        Button programmingButton = findViewById(R.id.programming);
+        ImageButton programmingButton = findViewById(R.id.programming);
         programmingButton.setOnClickListener(v -> openCategoryActivity("programming"));
 
-        Button essentialLicenseButton = findViewById(R.id.license);
+        ImageButton essentialLicenseButton = findViewById(R.id.license);
         essentialLicenseButton.setOnClickListener(v -> openCategoryActivity("essential_license"));
 
-        Button transferButton = findViewById(R.id.transfer);
+        ImageButton transferButton = findViewById(R.id.transfer);
         transferButton.setOnClickListener(v -> openCategoryActivity("transfer"));
 
-        Button publicOfficialButton = findViewById(R.id.public_official);
+        ImageButton publicOfficialButton = findViewById(R.id.public_official);
         publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
     }
 

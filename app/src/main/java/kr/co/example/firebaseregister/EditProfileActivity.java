@@ -1,16 +1,39 @@
-// EditProfileActivity.java
 package kr.co.example.firebaseregister;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-public class EditProfileActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+
+public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile); // 레이아웃 파일을 나중에 생성할 것입니다
+        setContentView(R.layout.activity_edit_profile); // XML 파일 이름 확인
 
-        // 사용자 정보 수정 관련 로직을 여기에 추가합니다.
+        //수정
+        // "arrowback" 버튼 클릭 시 ProfileActivity로 이동
+        ImageButton btnArrowback = findViewById(R.id.btnArrowback);
+        btnArrowback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // ProfileActivity로 이동
+                Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

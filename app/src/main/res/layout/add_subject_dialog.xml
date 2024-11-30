@@ -4,6 +4,14 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
+    <!-- 시작 시간 선택 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="과목"
+        android:layout_marginBottom="8dp" />
+
     <!-- 과목명 입력 -->
     <EditText
         android:id="@+id/subject_input"
@@ -11,9 +19,16 @@
         android:layout_height="wrap_content"
         android:hint="과목명을 입력하세요"
         android:inputType="text"
-        android:padding="8dp" />
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
 
     <!-- 시작 시간 선택 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시작 시간"
+        android:layout_marginBottom="8dp" />
+
     <TimePicker
         android:id="@+id/start_time_picker"
         android:layout_width="match_parent"
@@ -21,9 +36,26 @@
         android:timePickerMode="spinner" />
 
     <!-- 종료 시간 선택 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="종료 시간"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
     <TimePicker
         android:id="@+id/end_time_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:timePickerMode="spinner" />
+
+
+
+    <!-- 등록 버튼 -->
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="시간표 등록" />
 </LinearLayout>

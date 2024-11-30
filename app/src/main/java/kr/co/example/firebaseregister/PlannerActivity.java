@@ -25,6 +25,8 @@ public class PlannerActivity extends AppCompatActivity {
     private EditText dateInput;
     private Calendar calendar;
 
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,20 +75,52 @@ public class PlannerActivity extends AppCompatActivity {
         dateInput.setText(sdf.format(calendar.getTime()));
     }
 
+    private void showAddSubjectDialog() {
+        // 다이얼로그 레이아웃 inflate
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.add_subject_dialog, null);
+
+        // 다이얼로그 빌더 생성
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setTitle("시간표 추가")
+                .setPositiveButton("추가", (dialog, which) -> {
+                    // 사용자 입력값 처리
+                    EditText subjectInput = dialogView.findViewById(R.id.subject_input);
+                    TimePicker startTimePicker = dialogView.findViewById(R.id.start_time_picker);
+                    TimePicker endTimePicker = dialogView.findViewById(R.id.end_time_picker);
+
+                    String subject = subjectInput.getText().toString();
+                    int startHour = startTimePicker.getHour();
+                    int endHour = endTimePicker.getHour();
+
+                    if (subject.isEmpty()) {
+                        Toast.makeText(this, "과목명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (startHour >= endHour) {
+                        Toast.makeText(this, "시작 시간은 종료 시간보다 빨라야 합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // 시간표에 데이터 추가 로직
+                    updateTimetable(subject, startHour, endHour);
+                })
+                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
     private void updateTimetable(String subject, int startHour, int endHour) {
         TableLayout timetable = findViewById(R.id.timetable);
 
         for (int i = startHour; i < endHour; i++) {
             // 6시 기준으로 행을 가져옴 (6시가 첫 번째 행)
-            TableRow row = (TableRow) timetable.getChildAt(i - 6);
+            TableRow row = (TableRow) timetable.getChildAt(i - 6); // 6시부터 시작
             // 월요일 열을 기준으로 수정 (1은 월요일, 필요 시 변경)
-            TextView cell = (TextView) row.getChildAt(1);
+            TextView cell = (TextView) row.getChildAt(1); // 월요일 열
             cell.setText(subject);
             cell.setBackgroundColor(ContextCompat.getColor(this, R.color.highlight_color));
         }
     }
-
-
-
-
 }

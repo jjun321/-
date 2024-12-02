@@ -22,6 +22,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,30 +35,61 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // NavigationView 설정
+        // NavigationView 초기화
         NavigationView navigationView = findViewById(R.id.navigation_view);
-        View headerView = navigationView.getHeaderView(0); // 헤더 뷰 가져오기
 
-        // Firebase 사용자 정보 가져오기
+// 헤더 뷰 가져오기
+        View headerView = navigationView.getHeaderView(0); // 첫 번째 헤더 뷰 가져오기
+        TextView headerTitle = headerView.findViewById(R.id.nav_header_title); // 헤더 텍스트뷰 가져오기
+
+// Firebase Authentication에서 사용자 정보 가져오기
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String userName = (currentUser != null && currentUser.getDisplayName() != null)
-                ? currentUser.getDisplayName()
-                : "Guest";
+        if (currentUser != null) {
+            // Firebase Realtime Database에서 사용자 이름 가져오기
+            DatabaseReference userRef = FirebaseDatabase.getInstance()
+                    .getReference("UserAccount") // RegisterActivity에서 저장된 경로
+                    .child(currentUser.getUid()); // 현재 사용자의 UID
 
-        // 헤더에 사용자 이름 설정
-        TextView headerTitle = headerView.findViewById(R.id.nav_header_title);
-        headerTitle.setText(userName);
+            userRef.child("name").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult().exists()) {
+                    String userName = task.getResult().getValue(String.class); // 사용자 이름 가져오기
+                    if (userName != null) {
+                        // 헤더 텍스트 업데이트
+                        headerTitle.setText(userName + "님" + " 환영합니다! ");
 
-
-
-
-
-        // Navigation 메뉴 항목 업데이트
-        Menu menu = navigationView.getMenu();
-        MenuItem profileItem = menu.findItem(R.id.profile); // profile 항목의 ID
-        if (profileItem != null) {
-            profileItem.setTitle(userName); // 사용자 이름으로 제목 변경
+                        // MenuItem(profile) 업데이트
+                        Menu menu = navigationView.getMenu();
+                        MenuItem profileItem = menu.findItem(R.id.profile);
+                        if (profileItem != null) {
+                            profileItem.setTitle(userName); // 사용자 이름만 표시
+                        }
+                    } else {
+                        // 이름이 없을 경우 기본값 설정
+                        headerTitle.setText( "Guest님 환영합니다!");
+                        Menu menu = navigationView.getMenu();
+                        MenuItem profileItem = menu.findItem(R.id.profile);
+                        if (profileItem != null) {
+                            profileItem.setTitle("Guest");
+                        }
+                    }
+                } else {
+                    // 데이터 가져오기 실패 시 기본값 설정
+                    headerTitle.setText("환영합니다, Guest님!");
+                    Menu menu = navigationView.getMenu();
+                    MenuItem profileItem = menu.findItem(R.id.profile);
+                    if (profileItem != null) {
+                        profileItem.setTitle("Guest");
+                    }
+                }
+            });
+        } else {
+            // 로그인하지 않은 경우 기본값 설정
+            headerTitle.setText("환영합니다, Guest님!");
+            Menu menu = navigationView.getMenu();
+            MenuItem profileItem = menu.findItem(R.id.profile);
+            if (profileItem != null) {
+                profileItem.setTitle("로그인 필요");
+            }
         }
 
 
@@ -153,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_profile) {
-            // 사용자 정보 수정 페이지로 이동
-            Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+            //profileActivity로 이동
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
             return true;
         }

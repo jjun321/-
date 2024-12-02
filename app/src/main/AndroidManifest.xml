@@ -50,5 +50,13 @@
             android:name=".EditProfileActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
+
+        <activity
+            android:name=".TimerActivity"
+            android:exported="true"/>
+
+        <receiver
+            android:name=".ResetReceiver"
+            android:exported="true" />
     </application>
 </manifest>

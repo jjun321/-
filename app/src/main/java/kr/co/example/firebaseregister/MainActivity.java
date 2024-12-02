@@ -158,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
+        else if (item.getItemId() == R.id.nav_timer) {
+            Intent timerIntent = new Intent(this, TimerActivity.class);
+            startActivity(timerIntent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -176,4 +181,5 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
 }

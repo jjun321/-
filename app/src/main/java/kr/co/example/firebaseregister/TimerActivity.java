@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Calendar;
 
 public class TimerActivity extends AppCompatActivity {
-    private Spinner subjectSpinner;
     private TextView timerText;
     private Button startButton, pauseButton;
 

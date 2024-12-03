@@ -58,9 +58,9 @@ public class CategoryActivity extends AppCompatActivity {
         }
         // 필수 자격증 카테고리
         else if ("essential_license".equals(categoryType)) {
-            elements.add(new CategoryElement("한능검", "https://www.historyexam.go.kr/", R.drawable.ic_license));
-            elements.add(new CategoryElement("컴활", "https://www.q-net.or.kr/", R.drawable.ic_license));
-            elements.add(new CategoryElement("MOS", "https://www.microsoft.com/en-us/learning/mos-certification.aspx", R.drawable.ic_license));
+            elements.add(new CategoryElement("한능검", "https://www.historyexam.go.kr/", R.drawable.ic_han));
+            elements.add(new CategoryElement("컴활", "https://www.q-net.or.kr/", R.drawable.ic_han));
+            elements.add(new CategoryElement("MOS", "https://www.microsoft.com/en-us/learning/mos-certification.aspx", R.drawable.ic_mos));
         }
         // 편입 카테고리
         else if ("transfer".equals(categoryType)) {
@@ -70,8 +70,8 @@ public class CategoryActivity extends AppCompatActivity {
         }
         // 공무원 카테고리
         else if ("public_official".equals(categoryType)) {
-            elements.add(new CategoryElement("공무원 저널", "https://www.psnews.co.kr/", R.drawable.ic_public));
-            elements.add(new CategoryElement("공무원 합격의 길", "https://www.gonggantech.com/", R.drawable.ic_public));
+            elements.add(new CategoryElement("공무원 저널", "https://www.psnews.co.kr/", R.drawable.ic_gongj));
+            elements.add(new CategoryElement("공단기", "https://gong.conects.com/", R.drawable.ic_gongd));
             elements.add(new CategoryElement("에듀윌 공무원", "https://www.eduwill.net/", R.drawable.ic_eduwill));
         }
 

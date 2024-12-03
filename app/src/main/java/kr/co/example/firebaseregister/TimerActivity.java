@@ -1,18 +1,16 @@
 package kr.co.example.firebaseregister;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class TimerActivity extends AppCompatActivity {
     private TextView timerText;
@@ -22,6 +20,8 @@ public class TimerActivity extends AppCompatActivity {
     private long startTime = 0L;
     private boolean isRunning = false;
     private long elapsedTime = 0L;
+
+    private DatabaseReference mDatabase; // Firebase Database Reference
 
     private Runnable timerRunnable = new Runnable() {
         @Override
@@ -47,76 +47,37 @@ public class TimerActivity extends AppCompatActivity {
         startButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
 
-        // SharedPreferences에서 타이머 데이터 불러오기
-        elapsedTime = loadElapsedTime();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        // 타이머 시작
-        startButton.setOnClickListener(v -> {
-            if (!isRunning) {
-                startTime = System.currentTimeMillis();
-                handler.post(timerRunnable);
-                isRunning = true;
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isRunning) {
+                    startTime = System.currentTimeMillis();
+                    handler.post(timerRunnable);
+                    isRunning = true;
+                }
             }
         });
 
-        // 타이머 일시정지
-        pauseButton.setOnClickListener(v -> {
-            if (isRunning) {
-                handler.removeCallbacks(timerRunnable);
-                elapsedTime += System.currentTimeMillis() - startTime;
-                saveElapsedTime(elapsedTime);  // 데이터 저장
-                isRunning = false;
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isRunning) {
+                    handler.removeCallbacks(timerRunnable);
+                    elapsedTime += System.currentTimeMillis() - startTime;
+                    saveElapsedTime(elapsedTime);  // 학습 시간 저장
+                    isRunning = false;
+                }
             }
         });
-
-        // 매일 00시에 초기화
-        scheduleDailyReset();
     }
 
-    private void scheduleDailyReset() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    private void saveElapsedTime(long timeInSeconds) {
+        // 현재 로그인한 사용자의 ID 가져오기
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        Intent intent = new Intent(this, ResetReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
-
-        // 00시 설정
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-
-        // 다음 00시로 설정
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        // AlarmManager로 매일 00시 실행
-        if (alarmManager != null) {
-            alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY,
-                    pendingIntent
-            );
-        }
-    }
-
-    // SharedPreferences에 데이터 저장
-    private void saveElapsedTime(long elapsedTime) {
-        SharedPreferences sharedPreferences = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("elapsedTime", elapsedTime);
-        editor.apply();
-    }
-
-    // SharedPreferences에서 데이터 로드
-    private long loadElapsedTime() {
-        SharedPreferences sharedPreferences = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
-        return sharedPreferences.getLong("elapsedTime", 0);
+        // Realtime Database에 학습 시간 저장
+        mDatabase.child("users").child(userId).child("learningTime").setValue(timeInSeconds);
     }
 }

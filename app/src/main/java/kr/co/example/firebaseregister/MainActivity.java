@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import android.util.Log;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -191,9 +193,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        else if (item.getItemId() == R.id.nav_timer) {
-            Intent timerIntent = new Intent(this, TimerActivity.class);
-            startActivity(timerIntent);
+        if (item.getItemId() == R.id.nav_timer) {
+            Log.d("Navigation", "TimerActivity로 이동 시도");
+            try {
+                Intent timerIntent = new Intent(MainActivity.this, TimerActivity.class);
+                startActivity(timerIntent);
+            } catch (Exception e) {
+                Log.e("NavigationError", "TimerActivity 호출 실패", e);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

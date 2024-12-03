@@ -50,5 +50,14 @@
             android:name=".EditProfileActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
+
+        <!-- TimerActivity(타이머) 설정 추가 -->
+        <activity
+            android:name=".TimerActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true"/>
     </application>
 </manifest>

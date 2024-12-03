@@ -271,9 +271,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, PlannerActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_timer) {
-            // 다른 메뉴 처리 예제
-            // 학습 타이머 이동 (예시)
-            Toast.makeText(this, "학습 타이머 선택됨", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, TimerActivity.class); // 타이머 액티비티로 이동
+            startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

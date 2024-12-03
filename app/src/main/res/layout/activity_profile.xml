@@ -44,7 +44,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="프로필 이미지"
-        android:src="@drawable/ic_edit_profile"
+        android:src="@drawable/ic_profile"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

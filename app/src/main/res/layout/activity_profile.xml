@@ -51,7 +51,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
+        app:layout_constraintVertical_bias="0.241"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -63,10 +63,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.234"
+        app:layout_constraintHorizontal_bias="0.208"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
+        app:layout_constraintVertical_bias="0.258"
         tools:ignore="MissingConstraints" />
 
     <androidx.cardview.widget.CardView
@@ -121,7 +121,7 @@
         android:id="@+id/btnEditProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="148dp"
+        android:layout_marginBottom="272dp"
         android:backgroundTint="@color/black"
         android:text="회원정보수정"
         android:textColor="@color/white"
@@ -129,5 +129,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

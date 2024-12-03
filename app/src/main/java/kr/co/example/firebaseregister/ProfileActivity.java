@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,12 +110,31 @@ public class ProfileActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut(); // Firebase 로그아웃 처리
-                redirectToLogin(); // 로그인 화면으로 이동
+                // 로그아웃 확인 대화 상자 표시
+                showLogoutConfirmationDialog();
             }
         });
     }
+    private void showLogoutConfirmationDialog() {
+        // AlertDialog 생성
+        new AlertDialog.Builder(this)
+                .setTitle("로그아웃")
+                .setMessage("정말 로그아웃 하시겠습니까?")
+                .setNegativeButton("취소", (dialog, which) -> {
+                    // 대화 상자 닫기
+                    dialog.dismiss();
+                })
+                .setPositiveButton("확인", (dialog, which) -> {
+                    // 로그아웃 처리
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                    redirectToLogin(); // 로그인 화면으로 이동
+                })
+                .create()
+                .show();
+    }
+
+
 
 
     // 현재 날짜를 가져오는 메서드

@@ -1,5 +1,6 @@
 package kr.co.example.firebaseregister;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -82,6 +83,46 @@ public class TimerActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> Log.e("TimerActivity", "학습 시간 저장 중 오류 발생", e));
         } else {
             Log.e("TimerActivity", "사용자가 로그인되지 않았습니다.");
+        }
+    }
+
+    private void updateTimerText(long timeInMillis) {
+        int seconds = (int) (timeInMillis / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        int hours = minutes / 60;
+        minutes = minutes % 60;
+
+        timerText.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // SharedPreferences에 타이머 상태 저장
+        getSharedPreferences("TimerPrefs", MODE_PRIVATE)
+                .edit()
+                .putLong("elapsedTime", elapsedTime)
+                .putBoolean("isRunning", isRunning)
+                .putLong("startTime", isRunning ? startTime : 0L) // 실행 중일 때만 startTime 저장
+                .apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // SharedPreferences에서 타이머 상태 복원
+        SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
+        elapsedTime = prefs.getLong("elapsedTime", 0L);
+        isRunning = prefs.getBoolean("isRunning", false);
+
+        if (isRunning) {
+            startTime = prefs.getLong("startTime", System.currentTimeMillis());
+            handler.post(timerRunnable); // 타이머 다시 시작
+        } else {
+            updateTimerText(elapsedTime); // 멈춘 시간 복원
         }
     }
 

@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,16 +48,13 @@ public class MainActivity extends AppCompatActivity {
             // 로그아웃 상태라면 로그인 화면으로 이동
             redirectToLogin();
         } else {
-            // 로그인 상태 유지: 사용자 이메일 환영 메시지 출력
-            String email = currentUser.getEmail();
-            if (email != null) {
-                showWelcomeMessage(email);
-            }
+            // 사용자 UID를 이용해 이름 가져오기
+            fetchUserNameAndShowMessage(currentUser.getUid());
         }
 
         // UI 설정
         setupUI();
-    }
+}
 
     private void setupUI() {
         // NavigationView 초기화
@@ -177,8 +175,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showWelcomeMessage(String email) {
-        Toast.makeText(this, email + "님 환영합니다!", Toast.LENGTH_SHORT).show();
+    // 사용자 이름 가져오기 및 환영 메시지 표시
+    private void fetchUserNameAndShowMessage(String uid) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference("UserAccount")
+                .child(uid);
+
+        userRef.child("name").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                String userName = task.getResult().getValue(String.class);
+                if (userName != null) {
+                    showWelcomeMessage(userName);
+                } else {
+                    showWelcomeMessage("회원님"); // 이름이 없을 경우 기본값
+                }
+            } else {
+                showWelcomeMessage("회원님"); // 데이터 가져오기 실패 시 기본값
+            }
+        });
+    }
+
+    // 환영 메시지 표시
+    private void showWelcomeMessage(String userName) {
+        Toast.makeText(this, userName + "님 환영합니다!", Toast.LENGTH_SHORT).show();
     }
 
     private void redirectToLogin() {

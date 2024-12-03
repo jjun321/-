@@ -104,7 +104,18 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        //로그아웃 버튼 클릭 시 동작
+        Button btnLogOut = findViewById(R.id.btnLogOut);
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut(); // Firebase 로그아웃 처리
+                redirectToLogin(); // 로그인 화면으로 이동
+            }
+        });
     }
+
 
     // 현재 날짜를 가져오는 메서드
     private String getCurrentDate() {
@@ -113,7 +124,15 @@ public class ProfileActivity extends AppCompatActivity {
         return dateFormat.format(calendar.getTime());
     }
 
-
-
-
+    // 로그인 화면으로 이동하는 메서드
+    private void redirectToLogin() {
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish(); // 현재 액티비티 종료
+    }
 }
+
+
+
+

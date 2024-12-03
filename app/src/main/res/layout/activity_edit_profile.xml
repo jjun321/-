@@ -54,63 +54,67 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintVertical_bias="0.287" />
 
         <EditText
             android:id="@+id/et_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
             android:background="@drawable/edittext_background"
             android:hint="변경할 이메일 주소 입력"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             app:layout_constraintTop_toBottomOf="@+id/textView7"
-            tools:layout_editor_absoluteX="0dp" />
+            tools:layout_editor_absoluteX="65dp" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="비밀번호"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/et_email"
-            tools:layout_editor_absoluteX="0dp" />
+            tools:layout_editor_absoluteX="65dp" />
 
         <EditText
             android:id="@+id/edit_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/edittext_background"
             android:hint="변경할 비밀번호 6자리 이상 입력"
             android:inputType="textPassword"
             android:padding="12dp"
             app:layout_constraintTop_toBottomOf="@+id/textView8"
-            tools:layout_editor_absoluteX="0dp" />
+            tools:layout_editor_absoluteX="65dp" />
 
         <TextView
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="비밀번호 확인"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@+id/edit_password"
-            tools:layout_editor_absoluteX="0dp" />
+            tools:layout_editor_absoluteX="65dp" />
 
         <EditText
             android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/edittext_background"
             android:hint="변경할 비밀번호 확인"
             android:inputType="textPassword"
             android:padding="12dp"
             app:layout_constraintTop_toBottomOf="@+id/textView9"
-            tools:layout_editor_absoluteX="0dp" />
+            tools:layout_editor_absoluteX="65dp" />
 
         <Button
             android:id="@+id/btn_register"

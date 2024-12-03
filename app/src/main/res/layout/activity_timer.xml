@@ -36,6 +36,17 @@
         android:layout_height="wrap_content"
         android:text="일시 정지"
         android:textSize="18sp"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 초기화 버튼 -->
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="초기화"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>

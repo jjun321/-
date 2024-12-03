@@ -11,14 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
@@ -27,7 +28,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupUI() {
         // NavigationView 초기화
         NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0); // 첫 번째 헤더 뷰 가져오기
         TextView headerTitle = headerView.findViewById(R.id.nav_header_title); // 헤더 텍스트뷰 가져오기
 
@@ -257,4 +260,26 @@ public class MainActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
+
+    //네비게이션 메뉴항목 클릭시 이동되게
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_planner) {
+            //학습계획표로 이동
+            Intent intent = new Intent(MainActivity.this, PlannerActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_timer) {
+            // 다른 메뉴 처리 예제
+            // 학습 타이머 이동 (예시)
+            Toast.makeText(this, "학습 타이머 선택됨", Toast.LENGTH_SHORT).show();
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+
 }

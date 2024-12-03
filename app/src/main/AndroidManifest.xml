@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="kr.co.example.firebaseregister">
@@ -13,7 +12,7 @@
         android:theme="@style/Theme.FirebaseRegister"
         tools:targetApi="31">
 
-        <!-- SplashActivity 설정 (앱의 시작 화면으로 설정) -->
+        <!-- SplashActivity (앱 시작 화면) -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -23,33 +22,40 @@
             </intent-filter>
         </activity>
 
-        <!-- RegisterActivity 설정 -->
+        <!-- RegisterActivity -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:parentActivityName=".LoginActivity"/>
 
-        <!-- LoginActivity 설정 -->
+        <!-- LoginActivity -->
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
 
-        <!-- MainActivity 설정 -->
+        <!-- MainActivity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
 
-        <!-- CategoryActivity 설정 추가 -->
+        <!-- CategoryActivity -->
         <activity
             android:name=".CategoryActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
+        <!-- ProfileActivity -->
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".MainActivity" />
 
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".EditProfileActivity"/>
+        <!-- EditProfileActivity -->
+        <activity
+            android:name=".EditProfileActivity"
+            android:parentActivityName=".ProfileActivity" />
 
-
+        <!-- PlannerActivity -->
+        <activity
+            android:name=".PlannerActivity"
+            android:exported="true" />
     </application>
 </manifest>

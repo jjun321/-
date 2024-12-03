@@ -2,6 +2,7 @@ package kr.co.example.firebaseregister;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ public class TimerActivity extends AppCompatActivity {
     private boolean isRunning = false;
     private long elapsedTime = 0L;
 
-    private DatabaseReference mDatabase; // Firebase Database Reference
+    private DatabaseReference mDatabase;
 
     private Runnable timerRunnable = new Runnable() {
         @Override
@@ -49,35 +50,45 @@ public class TimerActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isRunning) {
-                    startTime = System.currentTimeMillis();
-                    handler.post(timerRunnable);
-                    isRunning = true;
-                }
+        startButton.setOnClickListener(v -> {
+            if (!isRunning) {
+                startTime = System.currentTimeMillis();
+                handler.post(timerRunnable);
+                isRunning = true;
             }
         });
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isRunning) {
-                    handler.removeCallbacks(timerRunnable);
-                    elapsedTime += System.currentTimeMillis() - startTime;
-                    saveElapsedTime(elapsedTime);  // 학습 시간 저장
-                    isRunning = false;
-                }
+        pauseButton.setOnClickListener(v -> {
+            if (isRunning) {
+                handler.removeCallbacks(timerRunnable);
+                elapsedTime += System.currentTimeMillis() - startTime;
+                saveElapsedTime(elapsedTime);
+                isRunning = false;
             }
         });
     }
 
-    private void saveElapsedTime(long timeInSeconds) {
-        // 현재 로그인한 사용자의 ID 가져오기
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private void saveElapsedTime(long timeInMillis) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            long timeInSeconds = timeInMillis / 1000;
+            mDatabase.child("users").child(userId).child("learningTime").setValue(timeInSeconds)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("TimerActivity", "학습 시간이 성공적으로 저장되었습니다.");
+                        } else {
+                            Log.e("TimerActivity", "학습 시간 저장 실패");
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.e("TimerActivity", "학습 시간 저장 중 오류 발생", e));
+        } else {
+            Log.e("TimerActivity", "사용자가 로그인되지 않았습니다.");
+        }
+    }
 
-        // Realtime Database에 학습 시간 저장
-        mDatabase.child("users").child(userId).child("learningTime").setValue(timeInSeconds);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(timerRunnable);
     }
 }

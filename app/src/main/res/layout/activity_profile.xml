@@ -83,7 +83,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="113dp"
             android:orientation="vertical">
 
             <!-- 학습 시간 타이틀 -->
@@ -95,24 +95,38 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- 학습 시간 설명 -->
-            <TextView
-                android:id="@+id/tvStudyContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="김OO 학생의 학습 시간"
-                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="400dp"
+                android:layout_height="61dp"
+                android:orientation="horizontal">
 
-            <!-- 학습 시간 -->
-            <TextView
-                android:id="@+id/tvStudyHours"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="10시간"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <!-- 학습 시간 설명 -->
+                <TextView
+                    android:id="@+id/tvStudyContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="김OO 학생의 학습 시간: "
+                    android:textSize="14sp" />
+
+                <!-- 학습 시간 -->
+                <TextView
+                    android:id="@+id/tvStudyHours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="10시간"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:contentDescription="티어"
+                    android:src="@drawable/ic_bronze" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

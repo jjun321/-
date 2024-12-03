@@ -33,10 +33,10 @@
 
         <EditText
             android:id="@+id/et_email"
-            android:background="@drawable/edittext_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:background="@drawable/edittext_background"
             android:hint="이메일을 입력하세요"
             android:padding="12dp" />
 
@@ -51,10 +51,10 @@
 
         <EditText
             android:id="@+id/et_pwd"
-            android:background="@drawable/edittext_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:background="@drawable/edittext_background"
             android:hint="비밀번호를 입력하세요"
             android:inputType="textPassword"
             android:padding="12dp" />

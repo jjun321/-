@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryElement element = elements.get(position);
         holder.name.setText(element.getName());
+        holder.icon.setImageResource(element.getIconResId()); // 아이콘 설정
         holder.itemView.setOnClickListener(v -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(element.getUrl()));
             context.startActivity(browserIntent);
@@ -43,14 +45,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public int getItemCount() {
         return elements.size();
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
-
+        ImageView icon; // 아이콘 뷰 추가
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.elementName);
+            icon = itemView.findViewById(R.id.elementIcon); // XML에서 아이콘 ID와 연결
         }
     }
 }

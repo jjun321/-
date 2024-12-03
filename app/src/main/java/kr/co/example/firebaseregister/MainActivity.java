@@ -155,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+
+            setupCategoryButtons();
         });
 
         // 카테고리 버튼 설정
@@ -175,6 +177,44 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton publicOfficialButton = findViewById(R.id.public_official);
         publicOfficialButton.setOnClickListener(v -> openCategoryActivity("public_official"));
+    }
+
+    private void setupCategoryButtons() {
+        ImageButton collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
+        collegeEntranceExamButton.setOnClickListener(v -> {
+            collegeEntranceExamButton.setImageResource(R.drawable.ic_college_entrance_exam);
+            openCategoryActivity("college_entrance_exam");
+        });
+
+        ImageButton foreignLanguageButton = findViewById(R.id.high_school_student);
+        foreignLanguageButton.setOnClickListener(v -> {
+            foreignLanguageButton.setImageResource(R.drawable.ic_foreign_language);
+            openCategoryActivity("foreign_language");
+        });
+
+        ImageButton programmingButton = findViewById(R.id.programming);
+        programmingButton.setOnClickListener(v -> {
+            programmingButton.setImageResource(R.drawable.ic_programming);
+            openCategoryActivity("programming");
+        });
+
+        ImageButton essentialLicenseButton = findViewById(R.id.license);
+        essentialLicenseButton.setOnClickListener(v -> {
+            essentialLicenseButton.setImageResource(R.drawable.ic_license);
+            openCategoryActivity("essential_license");
+        });
+
+        ImageButton transferButton = findViewById(R.id.transfer);
+        transferButton.setOnClickListener(v -> {
+            transferButton.setImageResource(R.drawable.ic_transfer);
+            openCategoryActivity("transfer");
+        });
+
+        ImageButton publicOfficialButton = findViewById(R.id.public_official);
+        publicOfficialButton.setOnClickListener(v -> {
+            publicOfficialButton.setImageResource(R.drawable.ic_public);
+            openCategoryActivity("public_official");
+        });
     }
 
     // 사용자 정보 수정 페이지로 이동

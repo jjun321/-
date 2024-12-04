@@ -62,7 +62,7 @@
             android:name=".TimerActivity"
             android:exported="true" />
 
-        <activity android:name=".PlannerActivity" />
+
 
 
 

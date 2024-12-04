@@ -15,9 +15,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
@@ -210,4 +212,28 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+    //////////
+    // 네비게이션 메뉴 선택 동작
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_planer) { // 학습 계획표 선택 시 PlannerActivity로 이동
+            Intent intent = new Intent(MainActivity.this, PlannerActivity.class);
+            startActivity(intent);
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+
+            // 다른 메뉴 항목 처리
+        } else if (itemId == R.id.profile) {
+            openProfileFragment();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        }
+        return false;
+    }
+
+    private void openProfileFragment() {
+    }
+
+
 }

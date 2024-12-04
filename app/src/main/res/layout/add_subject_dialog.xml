@@ -51,6 +51,7 @@
 
 
 
+
     <!-- 등록 버튼 -->
     <Button
         android:id="@+id/register_button"
@@ -60,3 +61,13 @@
         android:text="시간표 등록" />
 
 </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_save_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저장"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
+

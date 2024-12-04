@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         // 이름이 없을 경우 기본값 설정
-                        headerTitle.setText( "Guest님 환영합니다!");
+                        headerTitle.setText("Guest님 환영합니다!");
                         Menu menu = navigationView.getMenu();
                         MenuItem profileItem = menu.findItem(R.id.profile);
                         if (profileItem != null) {
@@ -94,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 profileItem.setTitle("로그인 필요");
             }
         }
-
-
 
 
         // DrawerLayout 초기화

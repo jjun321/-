@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,16 +27,27 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
         mFirevaseAuth = FirebaseAuth.getInstance();
         mDatebaseRef = FirebaseDatabase.getInstance().getReference();
 
+
+        // 이미 로그인된 상태라면 MainActivity로 이동
+        FirebaseUser currentUser = mFirevaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return; // 더 이상 실행하지 않음
+        }
+
+
         mEtEmail = findViewById(R.id.et_email);
         mEtPwd = findViewById(R.id.et_pwd);
         mBtnRegister = findViewById(R.id.btn_register);
         mBtnLogin = findViewById(R.id.btn_login);
+
 
         mBtnLogin.setOnClickListener(new View.OnClickListener(){
             @Override

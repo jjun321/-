@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="0dp">
 
     <!-- 툴바 -->
@@ -44,14 +45,14 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="프로필 이미지"
-        android:src="@drawable/ic_profile"
+        android:src="@drawable/ic_edit_profile"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
+        app:layout_constraintVertical_bias="0.241"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -63,10 +64,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.234"
+        app:layout_constraintHorizontal_bias="0.208"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
+        app:layout_constraintVertical_bias="0.258"
         tools:ignore="MissingConstraints" />
 
     <androidx.cardview.widget.CardView
@@ -116,16 +117,12 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-
-
-
     <!-- 회원정보 수정 버튼 -->
-
     <Button
         android:id="@+id/btnEditProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="272dp"
         android:backgroundTint="@color/black"
         android:text="회원정보수정"
         android:textColor="@color/white"
@@ -139,7 +136,7 @@
         android:id="@+id/btnLogOut"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="224dp"
         android:backgroundTint="@color/black"
         android:text="로그아웃"
         android:textColor="@color/white"
@@ -148,6 +145,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

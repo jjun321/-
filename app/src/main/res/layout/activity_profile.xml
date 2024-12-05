@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="김OO 학생의 학습 시간: "
+                    android:text="김OO 학생의 총 학습 누적시간: "
                     android:textSize="14sp" />
 
                 <!-- 학습 시간 -->

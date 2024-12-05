@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +38,21 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    private ProgressBar progressBar;
+    private TextView progressText;
+    private DatabaseReference mDatabase;
+
+    // 목표 학습 시간 (초 단위, 10시간 = 36000초)
+    private final long totalLearningGoal = 36000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // ProgressBar와 TextView 연결
+        progressBar = findViewById(R.id.progress_bar);
+        progressText = findViewById(R.id.progress_text);
 
         // Firebase Auth 초기화
         mAuth = FirebaseAuth.getInstance();
@@ -51,12 +64,47 @@ public class MainActivity extends AppCompatActivity
             redirectToLogin();
         } else {
             // 사용자 UID를 이용해 이름 가져오기
-            fetchUserNameAndShowMessage(currentUser.getUid());
+            String userId = currentUser.getUid();
+
+            // Firebase Database 경로 설정
+            mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("learningTime");
+
+            // Firebase에서 학습 시간 가져오기
+            loadLearningTime();
         }
 
         // UI 설정
         setupUI();
-}
+    }
+
+    private void loadLearningTime() {
+        mDatabase.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                Long totalTime = task.getResult().getValue(Long.class);
+                if (totalTime == null) totalTime = 0L;
+
+                // ProgressBar 업데이트
+                updateProgressBar(totalTime);
+            } else {
+                Log.e("MainActivity", "Firebase 데이터 로드 실패", task.getException());
+                Toast.makeText(this, "데이터 로드 실패!", Toast.LENGTH_SHORT).show();
+                updateProgressBar(0);
+            }
+        });
+    }
+
+
+    private void updateProgressBar(long totalTimeInSeconds) {
+        // 목표 대비 진행률 계산
+        int progress = (int) ((totalTimeInSeconds * 100) / totalLearningGoal);
+        if (progress > 100) progress = 100; // 최대값 제한
+
+        // ProgressBar와 TextView 업데이트
+        progressBar.setProgress(progress);
+        progressText.setText("진행률: " + progress + "%");
+    }
+
+
 
     private void setupUI() {
         // NavigationView 초기화
@@ -278,7 +326,5 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
 }

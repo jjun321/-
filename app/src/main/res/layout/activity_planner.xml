@@ -66,13 +66,14 @@ android:background="@color/white">
         <!-- 테이블 헤더 -->
         <TableRow>
             <TextView android:text="시간" style="@style/TableHeader"/>
+            <TextView android:text="일" style="@style/TableHeader"/>
             <TextView android:text="월" style="@style/TableHeader"/>
             <TextView android:text="화" style="@style/TableHeader"/>
             <TextView android:text="수" style="@style/TableHeader"/>
             <TextView android:text="목" style="@style/TableHeader"/>
             <TextView android:text="금" style="@style/TableHeader"/>
             <TextView android:text="토" style="@style/TableHeader"/>
-            <TextView android:text="일" style="@style/TableHeader"/>
+
         </TableRow>
 
         <!-- 시간표 (6시 - 6시) -->

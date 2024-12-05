@@ -9,47 +9,56 @@ android:padding="16dp"
 android:background="@color/white">
 
 <!-- 날짜 선택 영역 -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/date_selector"
-    android:layout_width="225dp"
-    android:layout_height="40dp"
-    tools:layout_editor_absoluteX="1dp"
-    tools:layout_editor_absoluteY="57dp"
-    tools:ignore="MissingConstraints">
-    <!-- 날짜 입력 필드 -->
-    <!-- 달력 아이콘 버튼 -->
-    <EditText
-        android:id="@+id/date_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_background"
-        android:hint="YYYY/MM/DD"
-        android:inputType="date"
-        android:padding="12dp"
-        android:textSize="14sp"
+
+    <!-- 시간표 테이블 -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/date_selector"
+        android:layout_width="210dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/date_picker_button"
+        app:layout_constraintEnd_toStartOf="@+id/btn_edit_timetable"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428"
-        app:layout_constraintWidth_percent="0.7"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints">
+        <!-- 날짜 입력 필드 -->
+        <!-- 달력 아이콘 버튼 -->
+        <EditText
+            android:id="@+id/date_input"
+            android:layout_width="129dp"
+            android:layout_height="41dp"
+            android:background="@drawable/edittext_background"
+            android:hint="YYYY/MM/DD"
+            android:inputType="date"
+            android:padding="12dp"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/date_picker_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.428"
+            app:layout_constraintWidth_percent="0.7"
+            tools:ignore="MissingConstraints" />
 
-    <ImageButton
-        android:id="@+id/date_picker_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Select Date"
-        android:src="@drawable/ic_calendar"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <ImageButton
+            android:id="@+id/date_picker_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Select Date"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 수정 및 추가 버튼 -->
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- 수정 및 추가 버튼 -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!-- 시간표 테이블 -->
-<ScrollView
+    <ScrollView
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"
@@ -287,27 +296,90 @@ android:background="@color/white">
             <TextView style="@style/TableCell"/>
         </TableRow>
 
+        <TableRow>
+            <TextView android:text="1" style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView android:text="2" style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView android:text="3" style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView android:text="4" style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView android:text="5" style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+            <TextView style="@style/TableCell"/>
+        </TableRow>
+
     </TableLayout>
 </ScrollView>
 
-<Button
-    android:id="@+id/btn_edit_timetable"
-    android:layout_width="80dp"
-    android:layout_height="40dp"
-    android:backgroundTint="@color/black"
-    android:text="수정"
-    android:textColor="@color/white"
-    tools:layout_editor_absoluteX="275dp"
-    tools:layout_editor_absoluteY="33dp" />
+    <Button
+        android:id="@+id/btn_edit_timetable"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
+        android:backgroundTint="@color/black"
+        android:text="수정"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.709"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-<Button
-    android:id="@+id/btn_add_timetable"
-    android:layout_width="80dp"
-    android:layout_height="40dp"
-    android:backgroundTint="@color/black"
-    android:text="추가"
-    android:textColor="@color/white"
-    tools:layout_editor_absoluteX="275dp"
-    tools:layout_editor_absoluteY="73dp" />
+    <Button
+        android:id="@+id/btn_add_timetable"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
+        android:backgroundTint="@color/black"
+        android:text="추가"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_edit_timetable"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

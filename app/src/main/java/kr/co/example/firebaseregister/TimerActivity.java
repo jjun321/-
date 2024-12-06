@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class TimerActivity extends AppCompatActivity {
     private TextView timerText;
-    private Button startButton, pauseButton, resetButton;
+    private Button toggleButton, resetButton;
 
     private Handler handler = new Handler();
     private long startTime = 0L;
@@ -45,11 +45,12 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         timerText = findViewById(R.id.timerText);
-        startButton = findViewById(R.id.startButton);
-        pauseButton = findViewById(R.id.pauseButton);
+        toggleButton = findViewById(R.id.toggleButton);
         resetButton = findViewById(R.id.resetButton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
 
         // SharedPreferences에서 저장된 타이머 상태 복원
         SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
@@ -57,9 +58,15 @@ public class TimerActivity extends AppCompatActivity {
         elapsedTime = prefs.getLong("elapsedTime", 0L);
         isRunning = prefs.getBoolean("isRunning", false);
 
+        // 초기화 버튼 비활성화 및 색상 설정
+        resetButton.setEnabled(false);
+        resetButton.setBackgroundColor(getResources().getColor(android.R.color.darker_gray)); // 비활성화 시 회색
+
         // 타이머 상태가 일시정지 상태인 경우, startTime을 이전 상태로 복원
         if (isRunning) {
             handler.post(timerRunnable); // 타이머가 실행 중이면 바로 실행
+            toggleButton.setText("일시정지");
+            toggleButton.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark)); // 일시정지 색상 빨간색으로 변경
         } else {
             // 타이머가 멈춰있는 경우, 타이머 텍스트 업데이트
             long millis = elapsedTime;
@@ -70,23 +77,29 @@ public class TimerActivity extends AppCompatActivity {
             minutes = minutes % 60;
 
             timerText.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            toggleButton.setText("시작");
+            toggleButton.setBackgroundColor(getResources().getColor(android.R.color.black)); // 시작 색상 검정으로 변경
         }
 
-        startButton.setOnClickListener(v -> {
+        toggleButton.setOnClickListener(v -> {
             if (!isRunning) {
                 startTime = System.currentTimeMillis();  // 타이머를 새로 시작하기 위해 startTime을 현재 시간으로 설정
                 handler.post(timerRunnable);  // 타이머 시작
                 isRunning = true;
+                toggleButton.setText("일시정지");
+                toggleButton.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark)); // 일시정지 색상 빨간색으로 변경
+                resetButton.setEnabled(true); // 초기화 버튼 활성화
+                resetButton.setBackgroundColor(getResources().getColor(android.R.color.black)); // 활성화 시 검정색으로 변경
                 saveTimerState();  // 타이머 시작 시 상태 저장
-            }
-        });
-
-        pauseButton.setOnClickListener(v -> {
-            if (isRunning) {
+            } else {
                 handler.removeCallbacks(timerRunnable);  // 타이머 일시 정지
                 elapsedTime += System.currentTimeMillis() - startTime;
                 saveElapsedTime(elapsedTime);  // 누적 시간 저장
                 isRunning = false;
+                toggleButton.setText("시작");
+                toggleButton.setBackgroundColor(getResources().getColor(android.R.color.black)); // 시작 색상 검정으로 변경
+                resetButton.setEnabled(true); // 초기화 버튼 활성화
+                resetButton.setBackgroundColor(getResources().getColor(android.R.color.black)); // 활성화 시 검정색으로 변경
                 saveTimerState();  // 타이머 일시 정지 시 상태 저장
             }
         });
@@ -97,9 +110,14 @@ public class TimerActivity extends AppCompatActivity {
             startTime = System.currentTimeMillis();  // 새로운 시작 시간으로 설정
             timerText.setText("00:00:00");  // 화면에 타이머 초기화 표시
             isRunning = false;
+            toggleButton.setText("시작");
+            toggleButton.setBackgroundColor(getResources().getColor(android.R.color.black)); // 시작 색상 검정으로 변경
+            resetButton.setEnabled(false); // 초기화 버튼 비활성화
+            resetButton.setBackgroundColor(getResources().getColor(android.R.color.darker_gray)); // 비활성화 시 회색으로 변경
             saveTimerState();  // 타이머 초기화 시 상태 저장
         });
     }
+
 
     private void saveTimerState() {
         SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);

@@ -62,5 +62,10 @@
             android:name=".TimerActivity"
             android:exported="true" />
 
+
+
+
+
+
     </application>
 </manifest>

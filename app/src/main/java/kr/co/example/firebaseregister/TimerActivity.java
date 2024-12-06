@@ -50,6 +50,8 @@ public class TimerActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
+
         // SharedPreferences에서 저장된 타이머 상태 복원
         SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
         startTime = prefs.getLong("startTime", 0L);

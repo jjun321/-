@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,7 @@ import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private TextView tvUserName, tvStudyContent, tvStudyDate;
+    private TextView tvUserName, tvStudyContent, tvStudyDate, tvStudyHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.UserName);
         tvStudyContent = findViewById(R.id.tvStudyContent); // 학습 시간 TextView 가져오기
         tvStudyDate = findViewById(R.id.tvStudyDate); // 학습 날짜 TextView 가져오기
+        tvStudyHours = findViewById(R.id.tvStudyHours); // 학습 시간(TextView) 추가
 
         // Firebase Auth를 사용해 현재 사용자 정보 가져오기
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,6 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
             DatabaseReference userRef = FirebaseDatabase.getInstance()
                     .getReference("UserAccount")
                     .child(uid);
+
 
             // 사용자 이름 가져오기
             userRef.child("name").get().addOnCompleteListener(task -> {
@@ -75,6 +78,31 @@ public class ProfileActivity extends AppCompatActivity {
                     tvStudyDate.setText(getCurrentDate()); // 기본값: 현재 날짜
                 }
             });
+
+            // 학습 시간 가져오기 (learningTimer 경로에서만 가져옴)
+            DatabaseReference learningTimeRef = FirebaseDatabase.getInstance()
+                    .getReference("users") // users/{uid}/learningTimer 경로
+                    .child(uid)
+                    .child("learningTime");
+
+            learningTimeRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        long learningTimeInSeconds = task.getResult().getValue(Long.class); // 초 단위로 가져오기
+                        int hours = (int) (learningTimeInSeconds / 3600);  // 초를 시간으로 변환 (3600초 = 1시간)
+                        int minutes = (int) ((learningTimeInSeconds % 3600) / 60); // 나머지 초에서 분을 구하기
+                        int seconds = (int) (learningTimeInSeconds % 60); // 나머지 초 구하기
+                        tvStudyHours.setText(String.format("%02d시간 %02d분", hours, minutes)); // 학습 시간 표시
+                        Log.d("Firebase", "Data: " + learningTimeInSeconds); // 로그 추가
+                    } else {
+                        tvStudyHours.setText("00시간 00분"); // 데이터가 없을 경우 기본값
+                        Log.d("Firebase", "No data found"); // 데이터 없을 경우 로그 추가
+                    }
+                } else {
+                    Log.e("FirebaseError", "Failed to read data", task.getException());  // 실패 로그 출력
+                }
+            });
+
 
         } else {
             tvUserName.setText("로그인 필요"); // 로그아웃 상태일 경우
@@ -115,6 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showLogoutConfirmationDialog() {
         // AlertDialog 생성
         new AlertDialog.Builder(this)
@@ -134,9 +163,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .show();
     }
 
-
-
-
     // 현재 날짜를 가져오는 메서드
     private String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
@@ -152,7 +178,3 @@ public class ProfileActivity extends AppCompatActivity {
         finish(); // 현재 액티비티 종료
     }
 }
-
-
-
-

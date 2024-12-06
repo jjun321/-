@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,20 +38,20 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
-    private ProgressBar progressBar;
+    private CircularProgressIndicator circularProgressBar; // CircularProgressIndicator로 변경
     private TextView progressText;
     private DatabaseReference mDatabase;
 
     // 목표 학습 시간 (초 단위, 10시간 = 36000초)
-    private final long totalLearningGoal = 36000;
+    private final long totalLearningGoal = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // ProgressBar와 TextView 연결
-        progressBar = findViewById(R.id.progress_bar);
+        // CircularProgressIndicator와 TextView 연결
+        circularProgressBar = findViewById(R.id.circular_progress_bar);
         progressText = findViewById(R.id.progress_text);
 
         // Firebase Auth 초기화
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
                 Long totalTime = task.getResult().getValue(Long.class);
                 if (totalTime == null) totalTime = 0L;
 
-                // ProgressBar 업데이트
+                // CircularProgressIndicator 업데이트
                 updateProgressBar(totalTime);
             } else {
                 Log.e("MainActivity", "Firebase 데이터 로드 실패", task.getException());
@@ -93,18 +93,15 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-
     private void updateProgressBar(long totalTimeInSeconds) {
         // 목표 대비 진행률 계산
         int progress = (int) ((totalTimeInSeconds * 100) / totalLearningGoal);
         if (progress > 100) progress = 100; // 최대값 제한
 
-        // ProgressBar와 TextView 업데이트
-        progressBar.setProgress(progress);
+        // CircularProgressIndicator와 TextView 업데이트
+        circularProgressBar.setProgress(progress);
         progressText.setText("진행률: " + progress + "%");
     }
-
-
 
     private void setupUI() {
         // NavigationView 초기화
@@ -226,27 +223,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // 사용자 이름 가져오기 및 환영 메시지 표시
-    private void fetchUserNameAndShowMessage(String uid) {
-        DatabaseReference userRef = FirebaseDatabase.getInstance()
-                .getReference("UserAccount")
-                .child(uid);
-
-        userRef.child("name").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists()) {
-                String userName = task.getResult().getValue(String.class);
-                if (userName != null) {
-                    showWelcomeMessage(userName);
-                } else {
-                    showWelcomeMessage("회원님"); // 이름이 없을 경우 기본값
-                }
-            } else {
-                showWelcomeMessage("회원님"); // 데이터 가져오기 실패 시 기본값
-            }
-        });
-    }
-
-    // 환영 메시지 표시
     private void showWelcomeMessage(String userName) {
         Toast.makeText(this, userName + "님 환영합니다!", Toast.LENGTH_SHORT).show();
     }
@@ -281,50 +257,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuthStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user == null) {
-                redirectToLogin();
-            }
-        };
-        mAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mAuthStateListener != null) {
-            mAuth.removeAuthStateListener(mAuthStateListener);
-        }
-    }
-
-    //네비게이션 메뉴항목 클릭시 이동되게
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_planner) {
-            //학습계획표로 이동
             Intent intent = new Intent(MainActivity.this, PlannerActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_timer) {
-            Intent intent = new Intent(MainActivity.this, TimerActivity.class); // 타이머 액티비티로 이동
+            Intent intent = new Intent(MainActivity.this, TimerActivity.class);
             startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

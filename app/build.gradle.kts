@@ -39,9 +39,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.google.android.material:material:1.9.0")
 
-   //MPAndroidChart 라이브러리
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 
 
 

@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="highlight_color">#FFFF99</color>
+    <color name="cell_background">#FFFFFF</color>
 
 
 </resources>

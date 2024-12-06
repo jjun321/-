@@ -65,8 +65,6 @@ public class PlannerActivity extends AppCompatActivity {
     }
 
 
-
-
     // DatePickerDialog를 표시하는 메서드
     private void showDatePickerDialog() {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, day) -> {
@@ -105,10 +103,14 @@ public class PlannerActivity extends AppCompatActivity {
                 // 기존 시간표 초기화
                 for (int i = 1; i < timetable.getChildCount(); i++) {
                     TableRow row = (TableRow) timetable.getChildAt(i);
-                    for (int j = 1; j <= 7; j++) {
-                        TextView cell = (TextView) row.getChildAt(j);
-                        cell.setText("");
-
+                    if (row != null) { // Null 체크
+                        for (int j = 1; j <= 7; j++) { // 요일 열
+                            TextView cell = (TextView) row.getChildAt(j);
+                            if (cell != null) {
+                                cell.setText("");
+                                cell.setBackgroundColor(ContextCompat.getColor(PlannerActivity.this, R.color.cell_background));
+                            }
+                        }
                     }
                 }
 
@@ -119,12 +121,21 @@ public class PlannerActivity extends AppCompatActivity {
                         String timeKey = timeSnapshot.getKey(); // 시간
                         String subject = timeSnapshot.getValue(String.class); // 과목명
 
-                        // 시간과 요일에 맞는 셀 업데이트
-                        int hour = Integer.parseInt(timeKey.replace("시", ""));
-                        TableRow row = (TableRow) timetable.getChildAt(hour - 6 + 1); // 헤더 제외
-                        TextView cell = (TextView) row.getChildAt(dayOfWeek);
-                        cell.setText(subject);
-                        cell.setBackgroundColor(ContextCompat.getColor(PlannerActivity.this, R.color.highlight_color));
+                        try {
+                            int hour = Integer.parseInt(timeKey.replace("시", ""));
+                            if (hour >= 6 && hour <= 24) { // 시간 범위 확인
+                                TableRow row = (TableRow) timetable.getChildAt(hour - 6 + 1); // 헤더 제외
+                                if (row != null) { // Null 체크
+                                    TextView cell = (TextView) row.getChildAt(dayOfWeek); // 해당 요일 열
+                                    if (cell != null) {
+                                        cell.setText(subject);
+                                        cell.setBackgroundColor(ContextCompat.getColor(PlannerActivity.this, R.color.highlight_color));
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -135,9 +146,6 @@ public class PlannerActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
 
     private void showAddSubjectDialog() {
@@ -183,23 +191,24 @@ public class PlannerActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String selectedDate = sdf.format(calendar.getTime());
 
-        // 시간표 데이터 구조 생성
+        // 시간표 데이터 저장 및 UI 업데이트
         for (int i = startHour; i < endHour; i++) {
-            // 요일을 계산
             int selectedDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // 1: 일요일, ..., 7: 토요일
             String timeKey = i + "시"; // 시간대 키
             String dayKey = String.valueOf(selectedDayOfWeek); // 요일 키 (1~7)
 
             // Firebase에 저장
             databaseReference.child(selectedDate).child(dayKey).child(timeKey).setValue(subject);
-        }
 
-        // UI 업데이트
-        for (int i = startHour; i < endHour; i++) {
+            // UI 업데이트
             TableRow row = (TableRow) timetable.getChildAt(i - 6 + 1); // 헤더 제외
-            TextView cell = (TextView) row.getChildAt(calendar.get(Calendar.DAY_OF_WEEK)); // 요일 열
-            cell.setText(subject);
-            cell.setBackgroundColor(ContextCompat.getColor(this, R.color.highlight_color));
+            if (row != null) {
+                TextView cell = (TextView) row.getChildAt(selectedDayOfWeek); // 요일 열
+                if (cell != null) {
+                    cell.setText(subject);
+                    cell.setBackgroundColor(ContextCompat.getColor(this, R.color.highlight_color));
+                }
+            }
         }
     }
 }

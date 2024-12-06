@@ -42,20 +42,26 @@ public class MainActivity extends AppCompatActivity
     private CircularProgressIndicator circularProgressBar;
     private TextView progressText;
     private DatabaseReference mDatabase;
+    private boolean isRealtimeUpdaterRunning = false; // 실시간 업데이트 활성화 상태 플래그
 
-    // 목표 학습 시간 (초 단위, 10시간 = 36000초)
-    private final long totalLearningGoal = 3600;
-
-    private long totalTimeInSeconds = 0; // 누적 학습 시간
+    private final long totalLearningGoal = 3600; // 목표 학습 시간 (초 단위)
+    private long firebaseLoadedTimeInSeconds = 0; // Firebase에서 불러온 누적 학습 시간
+    private long totalTimeInSeconds = 0; // 실시간으로 증가하는 학습 시간
     private boolean isRunning = false; // 실시간 업데이트 상태 플래그
     private Handler handler = new Handler();
+    private long timerActivityElapsedTimeInSeconds = 0; // TimerActivity에서 가져온 시간
+    private long timerLastSavedElapsedTime = 0; // TimerActivity에서 마지막 저장된 누적 시간
+
+
 
     private Runnable progressUpdater = new Runnable() {
         @Override
         public void run() {
-            if (isRunning) {
-                totalTimeInSeconds++;
-                updateProgressBar(totalTimeInSeconds);
+            if (isRealtimeUpdaterRunning) {
+                long currentTime = System.currentTimeMillis() / 1000;
+                long currentElapsedTime = currentTime - timerLastSavedElapsedTime;
+
+                updateProgressBar(firebaseLoadedTimeInSeconds + timerActivityElapsedTimeInSeconds + currentElapsedTime);
                 handler.postDelayed(this, 1000); // 1초마다 업데이트
             }
         }
@@ -72,53 +78,89 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if (currentUser == null) {
             redirectToLogin();
         } else {
             String userId = currentUser.getUid();
-            mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("learningTime");
-
-            loadLearningTime(); // Firebase에서 학습 시간 가져오기
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            loadLearningTime(userId); // Firebase에서 학습 시간 가져오기
         }
 
         setupUI();
     }
 
-    private void loadLearningTime() {
-        mDatabase.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                Long loadedTime = task.getResult().getValue(Long.class);
-                if (loadedTime != null) {
-                    totalTimeInSeconds = loadedTime;
-                }
-                updateProgressBar(totalTimeInSeconds);
-
-                // 실시간 업데이트 시작
-                startRealtimeProgressUpdater();
-            } else {
-                Log.e("MainActivity", "Firebase 데이터 로드 실패", task.getException());
-                Toast.makeText(this, "데이터 로드 실패!", Toast.LENGTH_SHORT).show();
-                updateProgressBar(0);
-            }
-        });
+    private void loadLearningTime(String userId) {
+        mDatabase.child("users").child(userId).child("learningTime")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        Long loadedTime = task.getResult().getValue(Long.class);
+                        firebaseLoadedTimeInSeconds = (loadedTime != null) ? loadedTime : 0; // 기본값 0으로 설정
+                        Log.d("MainActivity", "Firebase 누적 시간 로드: " + firebaseLoadedTimeInSeconds);
+                    } else {
+                        firebaseLoadedTimeInSeconds = 0; // 실패 시 기본값 0으로 설정
+                        Log.e("MainActivity", "Firebase 데이터 로드 실패", task.getException());
+                    }
+                    loadElapsedTimeFromTimerActivity(userId); // TimerActivity 데이터 로드
+                });
     }
 
-    private void updateProgressBar(long totalTimeInSeconds) {
-        int progress = (int) ((totalTimeInSeconds * 100) / totalLearningGoal);
+    private void loadElapsedTimeFromTimerActivity(String userId) {
+        mDatabase.child("users").child(userId).child("currentTimer")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        Long elapsedTime = task.getResult().getValue(Long.class);
+                        timerActivityElapsedTimeInSeconds = (elapsedTime != null) ? elapsedTime : 0;
+                        timerLastSavedElapsedTime = System.currentTimeMillis() / 1000; // 기본값 현재 시간
+                    } else {
+                        timerActivityElapsedTimeInSeconds = 0;
+                        Log.d("MainActivity", "currentTimer 데이터 없음. 0으로 초기화.");
+                    }
+                    startRealtimeProgressUpdater(); // 실시간 업데이트 시작
+                });
+    }
+
+
+
+    private void updateProgressBar(long totalDisplayedTime) {
+        long currentElapsedTime = Math.max(0, System.currentTimeMillis() / 1000 - timerLastSavedElapsedTime);
+        long totalTime = firebaseLoadedTimeInSeconds + timerActivityElapsedTimeInSeconds + currentElapsedTime;
+
+        int progress = (int) ((totalTime * 100) / totalLearningGoal);
         if (progress > 100) progress = 100;
 
         circularProgressBar.setProgress(progress);
         progressText.setText("진행률: " + progress + "%");
     }
 
+
+
     private void startRealtimeProgressUpdater() {
-        isRunning = true;
+        if (firebaseLoadedTimeInSeconds == 0 && timerActivityElapsedTimeInSeconds == 0) {
+            Log.d("MainActivity", "진행률 초기화: 0%");
+            updateProgressBar(0); // 초기값 0으로 설정
+        }
+        isRealtimeUpdaterRunning = true; // 실시간 업데이트 활성화
         handler.post(progressUpdater);
     }
 
+
     private void stopRealtimeProgressUpdater() {
-        isRunning = false;
+        isRealtimeUpdaterRunning = false; // 실시간 업데이트 중단
         handler.removeCallbacks(progressUpdater);
+    }
+
+    private void saveLearningTimeToFirebase() {
+        long updatedTotalTime = firebaseLoadedTimeInSeconds + totalTimeInSeconds;
+        mDatabase.setValue(updatedTotalTime).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.i("MainActivity", "Firebase에 누적 학습 시간 저장 성공!");
+            } else {
+                Log.e("MainActivity", "Firebase에 학습 시간 저장 실패", task.getException());
+            }
+        });
     }
 
     private void setupUI() {
@@ -264,13 +306,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        stopRealtimeProgressUpdater();
+        stopRealtimeProgressUpdater(); //실시간 업데이트 중단
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startRealtimeProgressUpdater();
+        startRealtimeProgressUpdater(); //실시간 업데이트 재개
     }
 
     @Override

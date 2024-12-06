@@ -7,9 +7,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;

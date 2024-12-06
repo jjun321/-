@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -44,13 +45,23 @@ public class TimerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
+        // 툴바 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 활성화
+        }
+        toolbar.setNavigationOnClickListener(v -> finish()); // 뒤로가기 버튼 클릭 시 액티비티 종료
+        // 제목 위치 미세 조정
+        TextView toolbarTitle = findViewById(R.id.toolbar_title);
+        toolbarTitle.setTranslationX(-80); // 제목을 왼쪽으로 80픽셀 이동(뒤로가기 버튼 고려)
+
         timerText = findViewById(R.id.timerText);
         toggleButton = findViewById(R.id.toggleButton);
         resetButton = findViewById(R.id.resetButton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-
 
         // SharedPreferences에서 저장된 타이머 상태 복원
         SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
@@ -117,7 +128,6 @@ public class TimerActivity extends AppCompatActivity {
             saveTimerState();  // 타이머 초기화 시 상태 저장
         });
     }
-
 
     private void saveTimerState() {
         SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);

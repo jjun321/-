@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center"
     android:background="@android:color/white">
 
-    <!-- 타이머 텍스트 -->
+    <!-- 툴바 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#000000"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-    <!-- 상단과 하단을 분리하기 위해 'layout_weight'를 활용 -->
+        <!-- 가운데 정렬된 타이머 제목 -->
+        <!-- 뒤로가기 버튼 고려해서 왼쪽으로 70db이동 -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginStart="-80dp"
+            android:text="학습 타이머"
+            android:textSize="20sp"
+            android:textColor="@android:color/white" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- 타이머 텍스트 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/timerText"
@@ -37,31 +57,30 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <!-- 초기화 버튼 (왼쪽) -->
+        <!-- 초기화 버튼 -->
         <Button
             android:id="@+id/resetButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#000000"
+            android:backgroundTint="@color/black"
             android:text="초기화"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
             android:padding="12dp"
             android:elevation="4dp" />
 
-        <!-- 시작/일시정지 버튼 (오른쪽) -->
+        <!-- 시작/일시정지 버튼 -->
         <Button
             android:id="@+id/toggleButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#000000"
+            android:backgroundTint="@color/black"
             android:text="시작"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
             android:padding="12dp"
             android:elevation="4dp" />
     </LinearLayout>
-
 </LinearLayout>

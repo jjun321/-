@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         // 기본 네비게이션 아이콘 비활성화
         toggle.setDrawerIndicatorEnabled(false);
 
-        // 네비게이션 아이콘 커스텀
+         // 네비게이션 아이콘 커스텀
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 100, 110, false);
         Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -38,53 +39,62 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
-    private CircularProgressIndicator circularProgressBar; // CircularProgressIndicator로 변경
+    private CircularProgressIndicator circularProgressBar;
     private TextView progressText;
     private DatabaseReference mDatabase;
 
     // 목표 학습 시간 (초 단위, 10시간 = 36000초)
-    private final long totalLearningGoal = 60;
+    private final long totalLearningGoal = 3600;
+
+    private long totalTimeInSeconds = 0; // 누적 학습 시간
+    private boolean isRunning = false; // 실시간 업데이트 상태 플래그
+    private Handler handler = new Handler();
+
+    private Runnable progressUpdater = new Runnable() {
+        @Override
+        public void run() {
+            if (isRunning) {
+                totalTimeInSeconds++;
+                updateProgressBar(totalTimeInSeconds);
+                handler.postDelayed(this, 1000); // 1초마다 업데이트
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // CircularProgressIndicator와 TextView 연결
         circularProgressBar = findViewById(R.id.circular_progress_bar);
         progressText = findViewById(R.id.progress_text);
 
-        // Firebase Auth 초기화
         mAuth = FirebaseAuth.getInstance();
 
-        // FirebaseUser로 로그인 상태 확인
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            // 로그아웃 상태라면 로그인 화면으로 이동
             redirectToLogin();
         } else {
-            // 사용자 UID를 이용해 이름 가져오기
             String userId = currentUser.getUid();
-
-            // Firebase Database 경로 설정
             mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("learningTime");
 
-            // Firebase에서 학습 시간 가져오기
-            loadLearningTime();
+            loadLearningTime(); // Firebase에서 학습 시간 가져오기
         }
 
-        // UI 설정
         setupUI();
     }
 
     private void loadLearningTime() {
         mDatabase.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
-                Long totalTime = task.getResult().getValue(Long.class);
-                if (totalTime == null) totalTime = 0L;
+                Long loadedTime = task.getResult().getValue(Long.class);
+                if (loadedTime != null) {
+                    totalTimeInSeconds = loadedTime;
+                }
+                updateProgressBar(totalTimeInSeconds);
 
-                // CircularProgressIndicator 업데이트
-                updateProgressBar(totalTime);
+                // 실시간 업데이트 시작
+                startRealtimeProgressUpdater();
             } else {
                 Log.e("MainActivity", "Firebase 데이터 로드 실패", task.getException());
                 Toast.makeText(this, "데이터 로드 실패!", Toast.LENGTH_SHORT).show();
@@ -94,27 +104,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateProgressBar(long totalTimeInSeconds) {
-        // 목표 대비 진행률 계산
         int progress = (int) ((totalTimeInSeconds * 100) / totalLearningGoal);
-        if (progress > 100) progress = 100; // 최대값 제한
+        if (progress > 100) progress = 100;
 
-        // CircularProgressIndicator와 TextView 업데이트
         circularProgressBar.setProgress(progress);
         progressText.setText("진행률: " + progress + "%");
     }
 
+    private void startRealtimeProgressUpdater() {
+        isRunning = true;
+        handler.post(progressUpdater);
+    }
+
+    private void stopRealtimeProgressUpdater() {
+        isRunning = false;
+        handler.removeCallbacks(progressUpdater);
+    }
+
     private void setupUI() {
-        // NavigationView 초기화
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0); // 첫 번째 헤더 뷰 가져오기
-        TextView headerTitle = headerView.findViewById(R.id.nav_header_title); // 헤더 텍스트뷰 가져오기
+        View headerView = navigationView.getHeaderView(0);
+        TextView headerTitle = headerView.findViewById(R.id.nav_header_title);
 
-        // Firebase Authentication에서 사용자 정보 가져오기
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             DatabaseReference userRef = FirebaseDatabase.getInstance()
-                    .getReference("UserAccount") // RegisterActivity에서 저장된 경로
+                    .getReference("UserAccount")
                     .child(currentUser.getUid());
 
             userRef.child("name").get().addOnCompleteListener(task -> {
@@ -137,24 +153,19 @@ public class MainActivity extends AppCompatActivity
             updateProfileMenu(navigationView, "로그인 필요");
         }
 
-        // DrawerLayout 초기화
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        // Toolbar 설정
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // ActionBarDrawerToggle 설정
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close
         );
 
-        // 기본 네비게이션 아이콘 비활성화
         toggle.setDrawerIndicatorEnabled(false);
 
-        // 네비게이션 아이콘 커스텀
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 100, 110, false);
         Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);
@@ -171,7 +182,6 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Toolbar의 제목을 중앙으로 정렬
         toolbar.post(() -> {
             for (int i = 0; i < toolbar.getChildCount(); i++) {
                 View view = toolbar.getChildAt(i);
@@ -195,7 +205,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // 카테고리 버튼 설정
         ImageButton collegeEntranceExamButton = findViewById(R.id.college_entrance_exam);
         collegeEntranceExamButton.setOnClickListener(v -> openCategoryActivity("college_entrance_exam"));
 
@@ -221,10 +230,6 @@ public class MainActivity extends AppCompatActivity
         if (profileItem != null) {
             profileItem.setTitle(title);
         }
-    }
-
-    private void showWelcomeMessage(String userName) {
-        Toast.makeText(this, userName + "님 환영합니다!", Toast.LENGTH_SHORT).show();
     }
 
     private void redirectToLogin() {
@@ -254,6 +259,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopRealtimeProgressUpdater();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startRealtimeProgressUpdater();
     }
 
     @Override

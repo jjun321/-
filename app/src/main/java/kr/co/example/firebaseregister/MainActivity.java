@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
 
     // 목표 학습 시간 (초 단위, 10시간 = 36000초)
-    private final long totalLearningGoal = 36000;
+    private final long totalLearningGoal = 60; //1분으로 설정
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

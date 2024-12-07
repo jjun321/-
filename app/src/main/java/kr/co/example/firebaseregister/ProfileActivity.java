@@ -2,9 +2,9 @@ package kr.co.example.firebaseregister;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -22,60 +22,50 @@ import java.util.Locale;
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView tvUserName, tvStudyContent, tvStudyDate, tvStudyHours;
+    private ImageView tierImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // XML에 정의된 TextView 연결
+        // XML에 정의된 TextView 및 ImageView 연결
         tvUserName = findViewById(R.id.UserName);
         tvStudyContent = findViewById(R.id.tvStudyContent);
         tvStudyDate = findViewById(R.id.tvStudyDate);
         tvStudyHours = findViewById(R.id.tvStudyHours);
+        tierImage = findViewById(R.id.tierImage); // 티어 이미지
 
-        // Firebase Auth를 사용해 현재 사용자 정보 가져오기
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
             String uid = currentUser.getUid();
 
-            // Firebase Database에서 사용자 이름 가져오기
+            // 사용자 정보 가져오기
             DatabaseReference userRef = FirebaseDatabase.getInstance()
                     .getReference("UserAccount")
                     .child(uid);
 
-            // 사용자 이름 가져오기
             userRef.child("name").get().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     String userName = task.getResult().getValue(String.class);
-
-                    if (userName != null) {
-                        tvUserName.setText(userName);
-                        tvStudyContent.setText(userName + "님의 총 누적 학습 시간: ");
-                    }
+                    tvUserName.setText(userName != null ? userName : "Guest");
+                    tvStudyContent.setText((userName != null ? userName : "Guest") + "님의 총 누적 학습 시간: ");
                 } else {
                     tvUserName.setText("Guest");
                     tvStudyContent.setText("Guest님의 학습 시간");
                 }
             });
 
-            // 학습 날짜 가져오기
             userRef.child("study_date").get().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult().exists()) {
                     String studyDate = task.getResult().getValue(String.class);
-
-                    if (studyDate != null) {
-                        tvStudyDate.setText(studyDate);
-                    } else {
-                        tvStudyDate.setText(getCurrentDate());
-                    }
+                    tvStudyDate.setText(studyDate != null ? studyDate : getCurrentDate());
                 } else {
                     tvStudyDate.setText(getCurrentDate());
                 }
             });
 
-            // 학습 시간 가져오기 (초 단위 데이터를 시:분:초로 변환)
             DatabaseReference learningTimeRef = FirebaseDatabase.getInstance()
                     .getReference("users")
                     .child(uid)
@@ -86,10 +76,12 @@ public class ProfileActivity extends AppCompatActivity {
                     long learningTimeInSeconds = task.getResult().getValue(Long.class);
                     String formattedTime = formatTime(learningTimeInSeconds);
                     tvStudyHours.setText(formattedTime);
-                    Log.d("Firebase", "Data: " + learningTimeInSeconds);
+
+                    // 티어 업데이트
+                    updateTier(learningTimeInSeconds);
                 } else {
                     tvStudyHours.setText("00시간 00분 00초");
-                    Log.d("Firebase", "No data found");
+                    tierImage.setImageResource(R.drawable.ic_bronze); // 기본값으로 브론즈 설정
                 }
             });
 
@@ -97,26 +89,52 @@ public class ProfileActivity extends AppCompatActivity {
             tvUserName.setText("로그인 필요");
             tvStudyContent.setText("로그인 필요님의 학습 시간");
             tvStudyDate.setText(getCurrentDate());
+            tierImage.setImageResource(R.drawable.ic_bronze); // 기본값으로 브론즈 설정
         }
 
-        // "회원정보 수정" 버튼 클릭
         Button btnEditProfile = findViewById(R.id.btnEditProfile);
         btnEditProfile.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
             startActivity(intent);
         });
 
-        // "뒤로가기" 버튼 클릭
         ImageButton btnArrowback = findViewById(R.id.btnArrowback);
         btnArrowback.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
-        // 로그아웃 버튼 클릭
         Button btnLogOut = findViewById(R.id.btnLogOut);
         btnLogOut.setOnClickListener(v -> showLogoutConfirmationDialog());
     }
+
+    private void updateTier(long totalSeconds) {
+
+//        //시간 단위
+//        long totalHours = totalSeconds / 3600;
+//
+//        if (totalHours < 3) {
+//            tierImage.setImageResource(R.drawable.ic_bronze);
+//        } else if (totalHours < 6) {
+//            tierImage.setImageResource(R.drawable.ic_silver);
+//        } else if (totalHours < 9) {
+//            tierImage.setImageResource(R.drawable.ic_gold);
+//        } else {
+//            tierImage.setImageResource(R.drawable.ic_king);
+
+        // 초 단위 기준으로 티어 조건 변경 (시연 영상및 발표때 잠깐 사용할 용도)
+            if (totalSeconds < 5) {
+                tierImage.setImageResource(R.drawable.ic_bronze);
+            } else if (totalSeconds < 10) {
+                tierImage.setImageResource(R.drawable.ic_silver);
+            } else if (totalSeconds < 15) {
+                tierImage.setImageResource(R.drawable.ic_gold);
+            } else {
+                tierImage.setImageResource(R.drawable.ic_king);
+            }
+
+        }
+
 
     private void showLogoutConfirmationDialog() {
         new AlertDialog.Builder(this)

@@ -122,11 +122,12 @@
 
 
                 <ImageView
+                    android:id="@+id/tierImage"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="end"
-                    android:contentDescription="티어"
-                    android:src="@drawable/ic_bronze" />
+                    android:contentDescription="티어 이미지"
+                    android:src="@drawable/ic_bronze" /> <!-- 기본 티어 이미지를 브론즈로 설정 -->
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

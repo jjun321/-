@@ -14,12 +14,7 @@
         android:id="@+id/nav_timer"
         android:icon="@drawable/ic_timer"
         android:title="학습 타이머"/>
-
-    <item
-        android:id="@+id/nav_quiz"
-        android:icon="@drawable/ic_quiz"
-        android:title="챗봇 퀴즈"/>
-
+    
 
 
 </menu>

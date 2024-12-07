@@ -4,6 +4,7 @@ package kr.co.example.firebaseregister;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,11 +21,11 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
 
         // Toolbar 설정
-        findViewById(R.id.btnArrowback).setOnClickListener(view -> {
-            // MainActivity로 전환
+        ImageButton backButton = findViewById(R.id.btnArrowback);
+        backButton.setOnClickListener(v -> {
             Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
             startActivity(intent);
-            finish(); // 현재 Activity 종료
+            finish();
         });
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);

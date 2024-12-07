@@ -52,11 +52,10 @@ public class PlannerActivity extends AppCompatActivity {
 
         datePickerButton.setOnClickListener(v -> showDatePickerDialog());
 
-        Button editButton = findViewById(R.id.btn_edit_timetable);
+
         Button addButton = findViewById(R.id.btn_add_timetable);
 
-        editButton.setOnClickListener(v ->
-                Toast.makeText(this, "시간표 수정 클릭됨", Toast.LENGTH_SHORT).show());
+
 
         addButton.setOnClickListener(v -> showAddSubjectDialog());
 

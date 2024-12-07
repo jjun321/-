@@ -39,11 +39,15 @@ dependencies {
     implementation(libs.firebase.database)
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.google.android.material:material:1.9.0")
 
-    // Glide 라이브러리 추가
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
+
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }

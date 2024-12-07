@@ -1,52 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center"
     android:background="@android:color/white">
 
+    <!-- 툴바 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#000000"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <!-- 가운데 정렬된 타이머 제목 -->
+        <!-- 뒤로가기 버튼 고려해서 왼쪽으로 70db이동 -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginStart="-80dp"
+            android:text="학습 타이머"
+            android:textSize="20sp"
+            android:textColor="@android:color/white" />
+    </androidx.appcompat.widget.Toolbar>
+
     <!-- 타이머 텍스트 -->
-    <TextView
-        android:id="@+id/timerText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00:00"
-        android:textSize="48sp"
-        android:textColor="@android:color/black"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginBottom="32dp" />
+        android:layout_weight="1">
 
-    <!-- 시작 버튼 -->
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/timerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="32dp"
+            android:gravity="center"
+            android:text="00:00:00"
+            android:textColor="@android:color/black"
+            android:textSize="48sp" />
+    </LinearLayout>
+
+    <!-- 버튼들을 하단에 배치 -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="시작"
-        android:textSize="18sp"
-        android:textColor="@android:color/white" />
+        android:orientation="horizontal"
+        android:gravity="center">
 
-    <!-- 일시 정지 버튼 -->
-    <Button
-        android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="일시 정지"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="16dp" />
+        <!-- 초기화 버튼 -->
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/black"
+            android:text="초기화"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:elevation="4dp" />
 
-    <!-- 초기화 버튼 -->
-    <Button
-        android:id="@+id/resetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="초기화"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="16dp" />
-
+        <!-- 시작/일시정지 버튼 -->
+        <Button
+            android:id="@+id/toggleButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/black"
+            android:text="시작"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:elevation="4dp" />
+    </LinearLayout>
 </LinearLayout>

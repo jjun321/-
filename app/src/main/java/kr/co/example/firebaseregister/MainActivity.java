@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,10 +38,21 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
+    private CircularProgressIndicator circularProgressBar; // CircularProgressIndicator로 변경
+    private TextView progressText;
+    private DatabaseReference mDatabase;
+
+    // 목표 학습 시간 (초 단위, 10시간 = 36000초)
+    private final long totalLearningGoal = 60; //1분으로 설정
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // CircularProgressIndicator와 TextView 연결
+        circularProgressBar = findViewById(R.id.circular_progress_bar);
+        progressText = findViewById(R.id.progress_text);
 
         // Firebase Auth 초기화
         mAuth = FirebaseAuth.getInstance();
@@ -51,12 +64,44 @@ public class MainActivity extends AppCompatActivity
             redirectToLogin();
         } else {
             // 사용자 UID를 이용해 이름 가져오기
-            fetchUserNameAndShowMessage(currentUser.getUid());
+            String userId = currentUser.getUid();
+
+            // Firebase Database 경로 설정
+            mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("learningTime");
+
+            // Firebase에서 학습 시간 가져오기
+            loadLearningTime();
         }
 
         // UI 설정
         setupUI();
-}
+    }
+
+    private void loadLearningTime() {
+        mDatabase.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                Long totalTime = task.getResult().getValue(Long.class);
+                if (totalTime == null) totalTime = 0L;
+
+                // CircularProgressIndicator 업데이트
+                updateProgressBar(totalTime);
+            } else {
+                Log.e("MainActivity", "Firebase 데이터 로드 실패", task.getException());
+                Toast.makeText(this, "데이터 로드 실패!", Toast.LENGTH_SHORT).show();
+                updateProgressBar(0);
+            }
+        });
+    }
+
+    private void updateProgressBar(long totalTimeInSeconds) {
+        // 목표 대비 진행률 계산
+        int progress = (int) ((totalTimeInSeconds * 100) / totalLearningGoal);
+        if (progress > 100) progress = 100; // 최대값 제한
+
+        // CircularProgressIndicator와 TextView 업데이트
+        circularProgressBar.setProgress(progress);
+        progressText.setText("진행률: " + progress + "%");
+    }
 
     private void setupUI() {
         // NavigationView 초기화
@@ -109,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         // 기본 네비게이션 아이콘 비활성화
         toggle.setDrawerIndicatorEnabled(false);
 
-         // 네비게이션 아이콘 커스텀
+        // 네비게이션 아이콘 커스텀
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_custom_menu);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 100, 110, false);
         Drawable customIcon = new BitmapDrawable(getResources(), scaledBitmap);
@@ -178,27 +223,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // 사용자 이름 가져오기 및 환영 메시지 표시
-    private void fetchUserNameAndShowMessage(String uid) {
-        DatabaseReference userRef = FirebaseDatabase.getInstance()
-                .getReference("UserAccount")
-                .child(uid);
-
-        userRef.child("name").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().exists()) {
-                String userName = task.getResult().getValue(String.class);
-                if (userName != null) {
-                    showWelcomeMessage(userName);
-                } else {
-                    showWelcomeMessage("회원님"); // 이름이 없을 경우 기본값
-                }
-            } else {
-                showWelcomeMessage("회원님"); // 데이터 가져오기 실패 시 기본값
-            }
-        });
-    }
-
-    // 환영 메시지 표시
     private void showWelcomeMessage(String userName) {
         Toast.makeText(this, userName + "님 환영합니다!", Toast.LENGTH_SHORT).show();
     }
@@ -233,52 +257,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuthStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user == null) {
-                redirectToLogin();
-            }
-        };
-        mAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mAuthStateListener != null) {
-            mAuth.removeAuthStateListener(mAuthStateListener);
-        }
-    }
-
-    //네비게이션 메뉴항목 클릭시 이동되게
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_planner) {
-            //학습계획표로 이동
             Intent intent = new Intent(MainActivity.this, PlannerActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_timer) {
-            Intent intent = new Intent(MainActivity.this, TimerActivity.class); // 타이머 액티비티로 이동
+            Intent intent = new Intent(MainActivity.this, TimerActivity.class);
             startActivity(intent);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
 }

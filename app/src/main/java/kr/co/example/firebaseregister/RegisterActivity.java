@@ -60,7 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
                                     // 계정 정보 설정
                                     account.setIdToken(firebaseUser.getUid());
                                     account.setEmailId(firebaseUser.getEmail());
-                                    account.setPassword(strPwd);
+                                    String encryptedPassword = HashUtils.hashPassword(strPwd); // 비밀번호 AES 암호화
+                                    account.setPassword(encryptedPassword);
                                     account.setName(strName); // 이름 추가
 
                                     // Firebase Realtime Database에 저장

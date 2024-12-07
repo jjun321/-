@@ -1,6 +1,7 @@
 // CategoryActivity.java
 package kr.co.example.firebaseregister;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,6 +18,14 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+
+        // Toolbar 설정
+        findViewById(R.id.btnArrowback).setOnClickListener(view -> {
+            // MainActivity로 전환
+            Intent intent = new Intent(CategoryActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish(); // 현재 Activity 종료
+        });
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

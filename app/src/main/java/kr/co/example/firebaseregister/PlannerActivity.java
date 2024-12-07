@@ -1,5 +1,6 @@
 package kr.co.example.firebaseregister;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -41,6 +42,14 @@ public class PlannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planner);
+
+        // Toolbar 설정
+        findViewById(R.id.btnArrowback).setOnClickListener(view -> {
+            // MainActivity로 전환
+            Intent intent = new Intent(PlannerActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish(); // 현재 Activity 종료
+        });
 
         // Firebase Database 초기화
         databaseReference = FirebaseDatabase.getInstance().getReference("Timetable");

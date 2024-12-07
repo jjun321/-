@@ -92,11 +92,12 @@ public class ProfileActivity extends AppCompatActivity {
             tierImage.setImageResource(R.drawable.ic_bronze); // 기본값으로 브론즈 설정
         }
 
-        Button btnEditProfile = findViewById(R.id.btnEditProfile);
-        btnEditProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            startActivity(intent);
-        });
+//      회원정보 수정  부분 주석처리ㅁ
+//        Button btnEditProfile = findViewById(R.id.btnEditProfile);
+//        btnEditProfile.setOnClickListener(v -> {
+//            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+//            startActivity(intent);
+//        });
 
         ImageButton btnArrowback = findViewById(R.id.btnArrowback);
         btnArrowback.setOnClickListener(v -> {

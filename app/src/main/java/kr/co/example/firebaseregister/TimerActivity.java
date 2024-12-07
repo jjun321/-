@@ -131,10 +131,6 @@ public class TimerActivity extends AppCompatActivity {
         });
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 2a90ccc (실시간으로 시간이 파이어 베이스에 저장되도록 수정)
     private void saveTimerState() {
         SharedPreferences prefs = getSharedPreferences("TimerPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

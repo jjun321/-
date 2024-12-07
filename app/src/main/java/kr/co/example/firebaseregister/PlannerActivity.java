@@ -52,11 +52,10 @@ public class PlannerActivity extends AppCompatActivity {
 
         datePickerButton.setOnClickListener(v -> showDatePickerDialog());
 
-        Button editButton = findViewById(R.id.btn_edit_timetable);
+
         Button addButton = findViewById(R.id.btn_add_timetable);
 
-        editButton.setOnClickListener(v ->
-                Toast.makeText(this, "시간표 수정 클릭됨", Toast.LENGTH_SHORT).show());
+
 
         addButton.setOnClickListener(v -> showAddSubjectDialog());
 
@@ -87,6 +86,8 @@ public class PlannerActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         dateInput.setText(sdf.format(calendar.getTime()));
         updateTimetableForWeek();
+        // 클릭 리스너는 업데이트 이후에 호출
+        addCellClickListeners();
     }
 
     private void updateTimetableForWeek() {
@@ -208,6 +209,113 @@ public class PlannerActivity extends AppCompatActivity {
                     cell.setText(subject);
                     cell.setBackgroundColor(ContextCompat.getColor(this, R.color.highlight_color));
                 }
+            }
+        }
+    }
+    private void showEditSubjectDialog(String currentSubject, int startHour, int endHour, int dayOfWeek) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.add_subject_dialog, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setTitle("시간표 수정/삭제");
+
+        EditText subjectInput = dialogView.findViewById(R.id.subject_input);
+        TimePicker startTimePicker = dialogView.findViewById(R.id.start_time_picker);
+        TimePicker endTimePicker = dialogView.findViewById(R.id.end_time_picker);
+
+        // 기존 데이터 설정
+        subjectInput.setText(currentSubject);
+        startTimePicker.setHour(startHour);
+        startTimePicker.setMinute(0);
+        endTimePicker.setHour(endHour);
+        endTimePicker.setMinute(0);
+
+        // "수정" 버튼
+        builder.setPositiveButton("수정", (dialog, which) -> {
+            String updatedSubject = subjectInput.getText().toString();
+            int updatedStartHour = startTimePicker.getHour();
+            int updatedEndHour = endTimePicker.getHour();
+
+            if (updatedSubject.isEmpty()) {
+                Toast.makeText(this, "과목명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (updatedStartHour >= updatedEndHour) {
+                Toast.makeText(this, "시작 시간은 종료 시간보다 빨라야 합니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            removeTimetableEntry(startHour, endHour, dayOfWeek); // 기존 데이터 삭제
+            updateTimetable(updatedSubject, updatedStartHour, updatedEndHour); // 새 데이터 추가
+        });
+
+        // "삭제" 버튼
+        builder.setNeutralButton("삭제", (dialog, which) -> {
+            removeTimetableEntry(startHour, endHour, dayOfWeek); // 기존 데이터 삭제
+            Toast.makeText(this, "시간표가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+        });
+
+        // "취소" 버튼
+        builder.setNegativeButton("취소", (dialog, which) -> dialog.dismiss());
+
+        builder.create().show();
+    }
+    private void removeTimetableEntry(int startHour, int endHour, int dayOfWeek) {
+        // 현재 선택된 날짜
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String selectedDate = sdf.format(calendar.getTime());
+
+        // Firebase에서 기존 데이터 삭제
+        for (int i = startHour; i < endHour; i++) {
+            String timeKey = i + "시";
+            databaseReference.child(selectedDate).child(String.valueOf(dayOfWeek)).child(timeKey).removeValue();
+        }
+
+        // UI에서 기존 데이터 삭제
+        TableLayout timetable = findViewById(R.id.timetable);
+        for (int i = startHour; i < endHour; i++) {
+            TableRow row = (TableRow) timetable.getChildAt(i - 6 + 1); // 헤더 제외
+            if (row != null) {
+                TextView cell = (TextView) row.getChildAt(dayOfWeek);
+                if (cell != null) {
+                    cell.setText("");
+                    cell.setBackgroundColor(ContextCompat.getColor(this, R.color.cell_background));
+                }
+            }
+        }
+    }
+    private void addCellClickListeners() {
+        TableLayout timetable = findViewById(R.id.timetable);
+
+        for (int i = 1; i < timetable.getChildCount(); i++) { // 시간 행
+            TableRow row = (TableRow) timetable.getChildAt(i);
+            for (int j = 1; j <= 7; j++) { // 요일 열
+                TextView cell = (TextView) row.getChildAt(j);
+                int hour = i + 5; // 시간 계산 (6시부터 시작)
+                int dayOfWeek = j; // 요일 (1: 일요일, ..., 7: 토요일)
+
+                cell.setOnClickListener(v -> {
+                    String subject = cell.getText().toString();
+                    if (!subject.isEmpty()) {
+                        // Firebase에서 종료 시간 가져오기
+                        String selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+                        databaseReference.child(selectedDate).child(String.valueOf(dayOfWeek))
+                                .child(hour + "시").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String endTime = dataSnapshot.child("endHour").getValue(String.class);
+                                        int endHour = (endTime != null) ? Integer.parseInt(endTime) : hour + 1;
+                                        showEditSubjectDialog(subject, hour, endHour, dayOfWeek);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Toast.makeText(PlannerActivity.this, "시간 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                });
             }
         }
     }
